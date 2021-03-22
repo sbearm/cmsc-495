@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\rescu\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
+    "python.pythonPath": "C:\\Users\\rescu\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+    "python.linting.enabled": true
 }
