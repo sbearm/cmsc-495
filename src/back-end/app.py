@@ -11,7 +11,7 @@ def hello():
 
 @app.route('/test/<id>')
 def get_sale(id):
-  return "The id is " +str(id)
+  return "The id is " + str(id)
 
 @app.route("/json")
 def json():
