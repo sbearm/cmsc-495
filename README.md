@@ -35,9 +35,8 @@ Running each
 ### Python
 
 - app.py has a few example endpoints that can be browsed with chrome easily
-    - "/" return only hello world, not very useful
-    - "/json" returns a json object with fake data, this is called in the angular app currently for testing
-    - "/test/<id>" allows for the passing of a variable via the url
+    - GET "/student", returns a list of all students in database
+    - GET "/student/4" returns a single student with Id of 1
 
 ### Angular
 
