@@ -8,6 +8,7 @@
 - Install the angular cli to run the angular project with ``` npm install -g @angular/cli ```
 - Install node dependencies with ``` npm install ```
 - Install Python and all dependencies in requirements.txt
+- **NOTE** be sure to have python and pip added as environment variables when installing, these should be check boxes when installing
 
 ## Console Instructions
 Angular
