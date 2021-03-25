@@ -4,10 +4,24 @@
 
 ## Instructions on getting set-up
 
-- Install Node.js for running angular project
+- Install Node.js for running angular project [Here](https://nodejs.org/en/)
 - Install the angular cli to run the angular project with ``` npm install -g @angular/cli ```
 - Install node dependencies with ``` npm install ```
 - Install Python and all dependencies in requirements.txt
+
+## Console Instructions
+Angular
+```
+cd src\front-end\student-app
+npm install
+ng serve
+```
+Python
+```
+cd src\back-end
+pip install -r requirements.txt
+python .\app.py
+```
 
 
 Running each
