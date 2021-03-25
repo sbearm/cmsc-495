@@ -1,5 +1,8 @@
-<p>student works!</p>
+
+<h2>List of students</h2>
 
 <div *ngIf="testData">
-  {{ testData.data.id}} - {{ testData.data.name}}
+  <div *ngFor="let student of testData.data">
+    {{ student.id }} - {{ student.email }}
+  </div>
 </div>

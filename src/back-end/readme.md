@@ -2,4 +2,4 @@
 
 ## How to run
 
-``` python -m flask run ```
+``` python .\app.py ```
