@@ -8,20 +8,12 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    NzButtonModule,
-    NzCardModule,
-    NzGridModule,
-    NzLayoutModule,
-    NzInputModule,
-    NzFormModule,
-    NzCheckboxModule,
-    NzIconModule,
-  ],
   exports:[
     NzButtonModule,
     NzCardModule,
@@ -30,7 +22,10 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzInputModule,
     NzFormModule,
     NzCheckboxModule,
-    NzIconModule
+    NzIconModule,
+    NzTypographyModule,
+    NzSpaceModule,
+    NzBreadCrumbModule
   ]
 })
 export class NgZorroModule { }
