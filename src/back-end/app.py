@@ -21,7 +21,7 @@ def get_all_student():
     return jsonify({
         'data': [result.serialized for result in students]
     })
-
+#student with id
 @app.route("/student/<id>")
 def get_student(id):
     resp = db.query_single('select id, name, email from users where Id = ?', id)
