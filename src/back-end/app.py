@@ -13,6 +13,7 @@ db = Database()
 
 
 @app.route("/student")
+#all students
 def get_all_student():
     resp = db.query_all('select id, name, email from users')
     students = []
