@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgZorroModule } from './ng-zorro/ng-zorro.module';
+import { LayoutComponent } from './layout/layout.component';
+import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgZorroModule } from './ng-zorro/ng-zorro.module';
-
 
 @NgModule({
-  declarations: [],
+  declarations: [LayoutComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -14,7 +15,8 @@ import { NgZorroModule } from './ng-zorro/ng-zorro.module';
     ReactiveFormsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgZorroModule
+    NgZorroModule,
+    RouterModule
   ],
   exports:[
     HttpClientModule,
@@ -22,7 +24,8 @@ import { NgZorroModule } from './ng-zorro/ng-zorro.module';
     ReactiveFormsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgZorroModule
+    NgZorroModule,
+    LayoutComponent
   ]
 })
 export class SharedModule { }

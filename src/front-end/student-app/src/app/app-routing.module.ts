@@ -9,6 +9,15 @@ const routes: Routes = [
   {
     path: 'student',
     loadChildren: () => import('./student/student.module').then(m => m.StudentModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
+    pathMatch: 'full'
   }
 ];
 
