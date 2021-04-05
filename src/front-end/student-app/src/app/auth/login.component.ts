@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
-    this.router.navigateByUrl("/home");
+    // this.router.navigateByUrl("/home");
   }
 
   ngOnInit(): void {

@@ -1,7 +1,7 @@
 <div>
   <div nz-row nzJustify="center">
     <div nz-col >
-      <nz-card style="width: 300px" nzTitle="Login" >
+      <nz-card style="width: 300px" nzTitle="VASSA Login" >
         <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
           <nz-form-item>
             <nz-form-control nzErrorTip="Please input your username!">
@@ -17,7 +17,7 @@
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
-          <div nz-row class="login-form-margin">
+          <!-- <div nz-row class="login-form-margin">
             <div nz-col [nzSpan]="12">
               <label nz-checkbox formControlName="remember">
                 <span>Remember me</span>
@@ -26,10 +26,15 @@
             <div nz-col [nzSpan]="12">
               <a class="login-form-forgot">Forgot password</a>
             </div>
-          </div>
+          </div> -->
           <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
           Or <a> register now! </a>
         </form>
+      </nz-card>
+    </div>
+    <div nz-col class="pl-6">
+      <nz-card style="width: 300px" nzTitle="Quick Login" >
+        
       </nz-card>
     </div>
   </div>

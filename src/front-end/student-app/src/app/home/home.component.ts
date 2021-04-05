@@ -9,8 +9,6 @@ export class HomeComponent implements OnInit {
 
   constructor() { }
 
-// Add Comment
-
   ngOnInit(): void {
   }
 
