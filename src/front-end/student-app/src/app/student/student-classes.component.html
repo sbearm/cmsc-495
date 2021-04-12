@@ -1,0 +1,51 @@
+<nz-table #basicTable [nzData]="classes">
+  <thead>
+    <tr>
+      <th>Class Id</th>
+      <th>Name</th>
+      <th>Time</th>
+      <th>Semester</th>
+      <th>Availibility</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{ data.id }}</td>
+      <td>
+        <a [routerLink]="" (click)="toggleDialog()">{{ data.name }}</a>
+      </td>
+      <td>{{ data.time }}</td>
+      <td>{{ data.semester }}</td>
+      <td>{{ data.beginning | date }} - {{ data.end | date }}</td>
+    </tr>
+  </tbody>
+</nz-table>
+<nz-modal
+  [(nzVisible)]="showClassDialog"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="toggleDialog()"
+>
+  <ng-template #modalTitle>Custom Modal Title</ng-template>
+
+  <ng-template #modalContent>
+    <p>Modal Content</p>
+    <p>Modal Content</p>
+    <p>Modal Content</p>
+    <p>Modal Content</p>
+    <p>Modal Content</p>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <span>Modal Footer:</span>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="handleOk()"
+      [nzLoading]="isConfirmLoading"
+    >
+      Custom Submit
+    </button>
+  </ng-template>
+</nz-modal>

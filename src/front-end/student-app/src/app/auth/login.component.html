@@ -1,34 +1,65 @@
 <div>
   <div nz-row nzJustify="center">
-    <div nz-col >
-      <nz-card style="width: 300px" nzTitle="Login" >
-        <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <div nz-col>
+      <nz-card style="width: 300px" nzTitle="VASSA Login">
+        <form
+          nz-form
+          [formGroup]="validateForm"
+          class="login-form"
+          (ngSubmit)="submitForm()"
+        >
           <nz-form-item>
             <nz-form-control nzErrorTip="Please input your username!">
               <nz-input-group nzPrefixIcon="user">
-                <input type="text" nz-input formControlName="userName" placeholder="Username" />
+                <input
+                  type="text"
+                  nz-input
+                  formControlName="userName"
+                  placeholder="Username"
+                />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
             <nz-form-control nzErrorTip="Please input your Password!">
               <nz-input-group nzPrefixIcon="lock">
-                <input type="password" nz-input formControlName="password" placeholder="Password" />
+                <input
+                  type="password"
+                  nz-input
+                  formControlName="password"
+                  placeholder="Password"
+                />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
-          <div nz-row class="login-form-margin">
-            <div nz-col [nzSpan]="12">
-              <label nz-checkbox formControlName="remember">
-                <span>Remember me</span>
-              </label>
-            </div>
-            <div nz-col [nzSpan]="12">
-              <a class="login-form-forgot">Forgot password</a>
-            </div>
-          </div>
-          <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
+          <button
+            nz-button
+            class="login-form-button login-form-margin"
+            [nzType]="'primary'"
+          >
+            Log in
+          </button>
           Or <a> register now! </a>
+        </form>
+      </nz-card>
+    </div>
+    <div nz-col class="pl-6">
+      <nz-card style="width: 300px" nzTitle="Test Login">
+        <form nz-form class="login-form">
+          <nz-form-item>
+            <nz-select [ngModel]="'Student'">
+              <nz-option [nzLabel]="'Student'" [nzValue]="'Student'"></nz-option>
+              <nz-option [nzLabel]="'Teacher'" [nzValue]="'Teacher'"></nz-option>
+            </nz-select>
+          </nz-form-item>
+          <button
+          nz-button
+          class="login-form-button login-form-margin"
+          [nzType]="'primary'"
+          (click)="quickLogin()"
+        >
+          Log in
+        </button>
         </form>
       </nz-card>
     </div>

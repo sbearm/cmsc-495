@@ -1,33 +1,35 @@
 <nz-layout class="layout">
-    <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
-      <h4 class="logo" nz-typography>VASSA</h4>
-      <ul nz-menu nzTheme="dark" nzMode="inline">
-        <li nz-menu-item>
-          <i nz-icon nzType="form"></i>
-          <span>My Classes</span>
-        </li>
-        <li nz-menu-item>
-          <i nz-icon nzType="alert"></i>
-          <span>My Grades</span>
-        </li>
-        <li nz-menu-item>
-          <i nz-icon nzType="book"></i>
-          <span>My Assignments</span>
-        </li>
-      </ul>
-    </nz-sider>
-    <nz-layout>
-      <nz-header>
-        <h1 style="padding-left: 10px; padding-top: 10px; text-align: center;" nz-typography>
-          VASSA Universtity - Student Records
-        </h1>
-      </nz-header>
-      <nz-content>
-        <div class="inner-content">
-          <router-outlet></router-outlet>
-        </div>
-      </nz-content>
-      <nz-footer></nz-footer>
-    </nz-layout>
+  <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
+    <h4 class="logo" nz-typography>VASSA</h4>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li nz-menu-item>
+        <i nz-icon nzType="form"></i>
+        <span>My Classes</span>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="alert"></i>
+        <span>My Grades</span>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="book"></i>
+        <span>My Assignments</span>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <h1
+        style="padding-left: 10px; padding-top: 10px; text-align: center"
+        nz-typography
+      >
+        VASSA Universtity - Student Records
+      </h1>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+    <nz-footer></nz-footer>
   </nz-layout>
-  
+</nz-layout>

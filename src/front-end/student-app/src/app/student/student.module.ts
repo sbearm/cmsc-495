@@ -5,10 +5,11 @@ import { StudentRoutingModule } from './student-routing.module';
 import { StudentComponent } from './student.component';
 import { SharedModule } from '../shared/shared.module';
 import { CoreModule } from '../core/core.module';
+import { StudentClassesComponent } from './student-classes.component';
 
 
 @NgModule({
-  declarations: [StudentComponent],
+  declarations: [StudentComponent, StudentClassesComponent],
   imports: [
     CommonModule,
     StudentRoutingModule,
