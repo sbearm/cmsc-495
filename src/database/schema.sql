@@ -22,7 +22,6 @@ insert into Users (userID,name,email,password,userType,homeAddress,city,state,zi
 	values(1000,"Adryan Blackwell","aBlackwell@vassa.edu","password123","instructor","1500 Oak Street","Towson","MD", 21204);
 
 
-
 create table Facility
 (
 
