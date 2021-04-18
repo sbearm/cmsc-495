@@ -22,10 +22,19 @@ app.config['SECRET_KEY'] = 'vassa'
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        data = jwt.decode(token, app.config['SECRET_KEY'])
-        current_user = 'select name from Users where userID = ?', data['id'].first()  
-        return f(current_user, *args, **kwargs)
+        try:
+            token = request.headers.get('Authorization')
+            if (token is None):
+                return {'Error': 'Token is required'}
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+            userID = data['Id']
+            current_user = db.query_single('select name from Users where userID = ?', [userID])
+            if (current_user is None):
+                return {'Error': 'Token does not match user'}
+            else:
+                return f(current_user, *args, **kwargs)
+        except Exception as err:
+            return {'Error': 'Token is invalid'}
     return decorated
 
 
@@ -74,7 +83,7 @@ def login():
 
         if check_password_hash(user[3], auth['password']):
             token = jwt.encode({'Id': user[0], 'exp': datetime.utcnow(
-            ) + timedelta(minutes=30)}, app.config['SECRET_KEY']).decode("utf-8")
+            ) + timedelta(minutes=30)}, app.config['SECRET_KEY']).decode('utf-8')
             return jsonify({'token': token})
     else:
         return jsonify({'Error': 'Need to provide credentials'})
