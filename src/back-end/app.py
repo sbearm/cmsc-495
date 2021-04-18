@@ -34,6 +34,7 @@ def token_required(f):
             else:
                 return f(current_user, *args, **kwargs)
         except Exception as err:
+            print(err)
             return {'Error': 'Token is invalid'}
     return decorated
 
@@ -52,14 +53,14 @@ def register():
 
     if(auth['email'] and auth['password']):
         user = db.query_single(
-            'select * from users where email = ?', [auth['email']])
+            'select * from Users where email = ?', [auth['email']])
 
         if(user):
             return {'error': 'Email is already in use'}, 400
 
         hashed_password = generate_password_hash(auth['password'])
 
-        db.execute('insert into users(name, email, password) values(?, ?, ?)', [
+        db.execute("insert into Users(name, email, userType, password) values(?, ?, 'Student', ?)", [
                    auth['name'], auth['email'], hashed_password])
 
         return jsonify({'data': 'Successfully registered'})
