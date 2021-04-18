@@ -25,29 +25,29 @@ export class AuthenticationService {
   }
 
   login(credentials: any): Observable<User> {
-    if (credentials['Type'] === 'Student') {
-      let newUser: User = {
-        id: '10',
-        email: 'test@gmail.com',
-        role: 'Student',
-        token: '123456789',
-      };
-      localStorage.setItem("currentUser", JSON.stringify(newUser));
-      this.currentUserSubject.next(newUser);
-      return this.currentUser;
-    }
+    // if (credentials['Type'] === 'Student') {
+    //   let newUser: User = {
+    //     id: '10',
+    //     email: 'test@gmail.com',
+    //     role: 'Student',
+    //     token: '123456789',
+    //   };
+    //   localStorage.setItem("currentUser", JSON.stringify(newUser));
+    //   this.currentUserSubject.next(newUser);
+    //   return this.currentUser;
+    // }
     // } else if (credentials['Type'] === 'Teacher') {
     //   console.log('teacher');
     //   return null;
     // }
 
-    // return this.apiService.post("/login", credentials).pipe(
-    //   map((user) => {
-    //     localStorage.setItem("currentUser", JSON.stringify(user));
-    //     this.currentUserSubject.next(user);
-    //     return user;
-    //   })
-    // );
+    return this.apiService.post("/login", credentials).pipe(
+      map((user) => {
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        this.currentUserSubject.next(user);
+        return user;
+      })
+    );
   }
 
   logout() {

@@ -28,7 +28,8 @@ def token_required(f):
                 return {'Error': 'Token is required'}
             data = jwt.decode(token, app.config['SECRET_KEY'])
             userID = data['Id']
-            current_user = db.query_single('select name from Users where userID = ?', [userID])
+            current_user = db.query_single(
+                'select name from Users where userID = ?', [userID])
             if (current_user is None):
                 return {'Error': 'Token does not match user'}
             else:

@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit {
   }
 
   quickLogin(): void {
-    this.authenticationService.login({ Type: 'Student' }).subscribe(data => {
+    let creds = this.validateForm.value;
+
+    this.authenticationService.login(creds).subscribe(data => {
       console.log(data)
       this.router.navigateByUrl('/home');
     });
@@ -34,8 +36,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      userName: [null, [Validators.required]],
+      email: [null, [Validators.required]],
       password: [null, [Validators.required]],
+      name:['Sam'],
       remember: [true],
     });
   }
