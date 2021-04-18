@@ -1,31 +1,25 @@
---drop table student;
+drop table student;
 
---drop table instructor;
+drop table instructor;
 
---drop table user;
+drop table User;
 
---drop table Facility;
+drop table Users;
 
---drop table Department;
+drop table Facility;
 
-create table User
+drop table Department;
+
+create table Users
 (
-	userID number primary key not null,
-	firstName varchar not null,
-	lastName varchar not null,
-	emailAddress varchar not null,
-	password varchar not null,
-	userType varchar not null,
-	homeAddress varchar not null,
-	city varchar not null,
-	state varchar not null,
-	zipCode number not null
-
+	userID integer primary key autoincrement,
+	name varchar not null,
+	email varchar not null,
+	password varchar not null
 );
 
-insert into User (userID,firstName,lastName,emailAddress,password,userType,homeAddress,city,state,zipCode) 
-	values(1000,"Adryan","Blackwell","aBlackwell@vassa.edu","password123","instructor","1500 Oak Street","Towson","MD", 21204);
-
+insert into Users (userID,name,email,password,userType,homeAddress,city,state,zipCode) 
+	values(1000,"Adryan Blackwell","aBlackwell@vassa.edu","password123","instructor","1500 Oak Street","Towson","MD", 21204);
 
 
 create table Facility

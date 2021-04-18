@@ -14,9 +14,9 @@ export class StudentComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.apiService.get('/student').subscribe(data => {
-      this.testData = data;
-    });
+    // this.apiService.get('/student').subscribe(data => {
+    //   this.testData = data;
+    // });
 
   }
 

@@ -5,9 +5,10 @@ import { LayoutComponent } from './layout/layout.component';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ShowRoleDirective } from './directives/show-role.directive';
 
 @NgModule({
-  declarations: [LayoutComponent],
+  declarations: [LayoutComponent, ShowRoleDirective],
   imports: [
     CommonModule,
     HttpClientModule,
