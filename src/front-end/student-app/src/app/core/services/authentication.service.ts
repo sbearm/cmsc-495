@@ -39,13 +39,19 @@ export class AuthenticationService {
     // } else if (credentials['Type'] === 'Teacher') {
     //   console.log('teacher');
     //   return null;
-    // }
-
     return this.apiService.post("/login", credentials).pipe(
       map((user) => {
         localStorage.setItem("currentUser", JSON.stringify(user));
         this.currentUserSubject.next(user);
         return user;
+      })
+    );
+  }
+
+  register(credentials: any): Observable<any>{
+    return this.apiService.post("/register", credentials).pipe(
+      map((message) => {
+        return message;
       })
     );
   }

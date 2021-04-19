@@ -13,11 +13,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 cors = CORS(app)
 
-db = Database()
-
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SECRET_KEY'] = 'vassa'
 
+
+# This connection changes based on user specific path
+app.config['DATABASE_PATH'] = 'C:\\GitHub\\cmsc-495\\src\\database\\db.db'
+
+
+db = Database(app.config['DATABASE_PATH'])
 
 def token_required(f):
     @wraps(f)

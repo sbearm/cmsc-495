@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if(this.authenticationService.currentUserValue != null) {
+    if(this.authenticationService.currentUser != null) {
       // let roles = next.data['permittedRoles'] as Array<string>;
       // if(roles) {
       //   if(this.authenticationService.roleMatch(roles)) {
@@ -25,10 +25,10 @@ export class AuthGuard implements CanActivate {
       //   }
       // }
       // return true; 
-      console.log(this.authenticationService.currentUserValue)
+      // console.log(this.authenticationService.currentUserValue)
       return true;
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
       return false;
     }
   }

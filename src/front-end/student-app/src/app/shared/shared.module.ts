@@ -6,9 +6,10 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShowRoleDirective } from './directives/show-role.directive';
+import { ShowAuthedDirective } from './directives/show-authed.directive';
 
 @NgModule({
-  declarations: [LayoutComponent, ShowRoleDirective],
+  declarations: [LayoutComponent, ShowRoleDirective, ShowAuthedDirective],
   imports: [
     CommonModule,
     HttpClientModule,
