@@ -18,6 +18,15 @@ export class RegisterComponent implements OnInit {
     private authenticationService: AuthenticationService
   ) {}
 
+  ngOnInit(): void {
+    this.validateForm = this.fb.group({
+      email: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+      name:[null, [Validators.required]],
+      remember: [true],
+    });
+  }
+
   submitForm(): void {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
@@ -26,31 +35,11 @@ export class RegisterComponent implements OnInit {
 
     let creds = this.validateForm.value;
 
-    this.authenticationService.login(creds).subscribe(data => {
-      console.log(data)
-      this.router.navigateByUrl('/home');
+    this.authenticationService.register(creds).subscribe(data => {
+      this.router.navigateByUrl('/login');
     });
   }
 
-  quickLogin(): void {
-    let creds = this.validateForm.value;
-
-    this.authenticationService.login(creds).subscribe(data => {
-      console.log(data)
-      this.router.navigateByUrl('/home');
-    });
-  }
-
-  ngOnInit(): void {
-    if(this.authenticationService.currentUserValue != null) {
-      this.router.navigateByUrl('/home');
-    }
-    this.validateForm = this.fb.group({
-      email: [null, [Validators.required]],
-      password: [null, [Validators.required]],
-      name:[null, [Validators.required]],
-      remember: [true],
-    });
-  }
+  
 
 }
