@@ -1,1 +1,60 @@
-<p>register works!</p>
+<div>
+    <div nz-row nzJustify="center">
+      <div nz-col>
+        <nz-card style="width: 300px" nzTitle="SRMS Registration">
+          <form
+            nz-form
+            [formGroup]="validateForm"
+            class="login-form"
+            (ngSubmit)="submitForm()"
+          >
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your name!">
+              <nz-input-group nzPrefixIcon="name">
+                <input
+                  type="text"
+                  nz-input
+                  formControlName="name"
+                  placeholder="Name"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+            <nz-form-item>
+              <nz-form-control nzErrorTip="Please input your email!">
+                <nz-input-group nzPrefixIcon="email">
+                  <input
+                    type="text"
+                    nz-input
+                    formControlName="email"
+                    placeholder="Email"
+                  />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control nzErrorTip="Please input your Password!">
+                <nz-input-group nzPrefixIcon="lock">
+                  <input
+                    type="password"
+                    nz-input
+                    formControlName="password"
+                    placeholder="Password"
+                  />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <button
+              nz-button
+              class="login-form-button login-form-margin"
+              [nzType]="'primary'"
+            >
+              Register
+            </button>
+            Or <a routerLink="/auth/login"> login now! </a>
+          </form>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+  

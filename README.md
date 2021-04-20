@@ -1,6 +1,6 @@
 # cmsc-495
-495 Project
 
+495 Project
 
 ## Instructions on getting set-up
 
@@ -31,13 +31,21 @@ Running each
 - Angular Front-End ``` ng serve ```
 
 
+## Python and Virtual Environments
+
+It may be a good idea to set up a virtual environemnt to run you python application
+
+See this article for more details https://www.liquidweb.com/kb/how-to-setup-a-python-virtual-environment-on-windows-10/
+
+
 ## What it does and how everything links up
 
 ### Python
 
 - app.py has a few example endpoints that can be browsed with chrome easily
-    - GET "/student", returns a list of all students in database
-    - GET "/student/4" returns a single student with Id of 1
+    - POST "/login", accepts an email and password and returns a jwt token
+    - POST "/register" accepts a email, name, and password and inserts a new user to the database
+    - GET "/authTest", tests out proper authentication (will be removed in final)
 
 ### Angular
 
