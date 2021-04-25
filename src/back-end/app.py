@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from flask_cors import CORS, cross_origin
 from database import Database
 import sqlite3
-from models import Student, Classes
+from models import Student, Classes, ClassDetail
 from functools import wraps
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -99,50 +99,88 @@ def authTest(current_user):
 @token_required
 @cross_origin()
 def classregistration(current_user):
-    resp = db.query_all(
-        """
-        SELECT 
-            courseID, 
-            courseName, 
-            creditHours, 
-            course.instructorID AS Course, 
-            instructor.userID AS Instructor, 
-            users.name AS Name
-        FROM
-            course 
-        INNER JOIN instructor on instructor.instructorID = course.instructorID 
-        INNER JOIN users on users.userID = instructor.userID;
-        """
-        )
-    courses = []
-    for course in resp:
-        courses.append(Classes(data=course))
-    return jsonify({
-        'course data': [result.serialized for result in courses]
-    })
+    try:
+        resp = db.query_all(
+            """
+                select 
+                    c.courseID, 
+                    courseName, 
+                    creditHours, 
+                    c.instructorID AS instructorId,
+                    u.name AS instructorName,
+                    i.departmentName,
+                    0 as registered
+                from course c
+                INNER JOIN instructor i on i.instructorID = c.instructorID 
+                INNER JOIN users u on u.userID = i.userID
+                where courseID not in (
+                    select courseID from enrollment e
+                    inner join student s 
+                    on s.studentID = e.studentID
+                    inner join Users u
+                    on s.userId = u.userID
+                    where u.userID = ?
+                )
+                union
+                select 
+                    c.courseID, 
+                    courseName, 
+                    creditHours, 
+                    c.instructorID AS instructorId,
+                    u.name AS instructorName,
+                    i.departmentName,
+                    1 as registered
+                from course c
+                INNER JOIN instructor i on i.instructorID = c.instructorID 
+                INNER JOIN users u on u.userID = i.userID
+                where courseID in (
+                    select courseID from enrollment e
+                    inner join student s 
+                    on s.studentID = e.studentID
+                    inner join Users u
+                    on s.userId = u.userID
+                    where u.userID = ?
+                )
+            """, [current_user[2], current_user[2]]
+            )
+        courses = []
+        for course in resp:
+            courses.append(Classes(data=course))
+        return jsonify({
+            'data': [result.serialized for result in courses]
+        })
+
+    except Exception as err:
+            print(err)
+            return {'Error': 'Logic Error'}
 
 
-@app.route("/coursedetail/<idd>", methods=['GET'])
+@app.route("/coursedetail/<courseid>", methods=['GET'])
 @token_required
 @cross_origin()
-def classdetail(current_user, idd):
-    resp = db.query_single(
+def classdetail(current_user, courseid):
+    try:
+        resp = db.query_single(
         """
-        SELECT 
-            courseID, 
+        select 
+            c.courseID, 
             courseName, 
             creditHours, 
-            course.instructorID, 
-            instructor.userID, 
-            users.name
-        FROM
-            course 
-        INNER JOIN instructor on instructor.instructorID = course.instructorID 
-        INNER JOIN users on users.userID = instructor.userID
-        WHERE course.courseID = ?""", [idd]
-    )
-    result = Classes(data=resp)
-    return jsonify(result.serialized)
+            c.instructorID AS instructorId,
+            u.name AS instructorName,
+            i.departmentName
+        from course c
+        INNER JOIN instructor i on i.instructorID = c.instructorID 
+        INNER JOIN users u on u.userID = i.userID
+        where courseID = ?
+        """, [courseid]
+        )
+        result = ClassDetail(data=resp)
+        return jsonify(result.serialized)
+
+    except Exception as err:
+        print(err)
+        return {'Error': 'Logic Error'}
 
 
 if __name__ == '__main__':
