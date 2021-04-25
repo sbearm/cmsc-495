@@ -13,11 +13,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 cors = CORS(app)
 
-db = Database()
-
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SECRET_KEY'] = 'vassa'
 
+
+# This connection changes based on user specific path
+app.config['DATABASE_PATH'] = 'C:\\GitHub\\cmsc-495\\src\\database\\db.db'
+
+
+db = Database(app.config['DATABASE_PATH'])
 
 def token_required(f):
     @wraps(f)
@@ -34,6 +38,7 @@ def token_required(f):
             else:
                 return f(current_user, *args, **kwargs)
         except Exception as err:
+            print(err)
             return {'Error': 'Token is invalid'}
     return decorated
 
@@ -45,15 +50,15 @@ def register():
 
     if(auth['email'] and auth['password']):
         user = db.query_single(
-            'select * from users where email = ?', [auth['email']])
+            'select * from Users where email = ?', [auth['email']])
 
         if(user):
             return {'error': 'Email is already in use'}, 400
 
         hashed_password = generate_password_hash(auth['password'])
 
-        db.execute('insert into users(name, email, password, userType) values(?, ?, ?, ?)', [
-                   auth['name'], auth['email'], hashed_password, auth['userType']])
+        db.execute("insert into Users(name, email, userType, password) values(?, ?, 'Student', ?)", [
+                   auth['name'], auth['email'], hashed_password])
 
         return jsonify({'data': 'Successfully registered'})
 

@@ -23,20 +23,36 @@ export class LoginComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
+
+    let creds = this.validateForm.value;
+
+    this.authenticationService.login(creds).subscribe(
+      (succ) => {
+        this.router.navigate(['/home']);
+      },
+      (err) => {}
+    );
   }
 
   quickLogin(): void {
-    this.authenticationService.login({ Type: 'Student' }).subscribe(data => {
-      console.log(data)
-      this.router.navigateByUrl('/home');
-    });
+    let creds = this.validateForm.value;
+
+    this.authenticationService.register(creds).subscribe(
+      (succ) => {
+        this.router.navigate(['/home']);
+      },
+      (err) => {}
+    );
   }
 
   ngOnInit(): void {
+    if (this.authenticationService.currentUserValue != null) {
+      this.router.navigate(['/home']);
+    }
     this.validateForm = this.fb.group({
-      userName: [null, [Validators.required]],
+      email: [null, [Validators.required]],
       password: [null, [Validators.required]],
-      remember: [true],
+      name: ['Sam'],
     });
   }
 }

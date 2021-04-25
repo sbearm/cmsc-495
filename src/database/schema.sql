@@ -1,26 +1,37 @@
-drop table student;
-
-drop table instructor;
-
-drop table User;
-
-drop table Users;
-
-drop table Facility;
-
-drop table Department;
 
 create table Users
 (
 	userID integer primary key autoincrement,
 	name varchar not null,
 	email varchar not null,
+	userType varchar not null,
 	password varchar not null
 );
 
-insert into Users (userID,name,email,password,userType,homeAddress,city,state,zipCode) 
-	values(1000,"Adryan Blackwell","aBlackwell@vassa.edu","password123","instructor","1500 Oak Street","Towson","MD", 21204);
+create table Students (
 
+	studentID number primary key not null,
+	userID number  not null,
+	userType number  not null,
+	Major varchar not null,
+	GPA real,
+
+	foreign key (userID,userType) references User (userID,userType) on delete cascade
+
+);
+
+create table Instructors (
+	instructorID primary key not null,
+	userID number  not null,
+	userType number  not null,
+	departmentID number  not null,
+	departmentName varchar not null,
+	foreign key (userID,userType) references User (userID,userType) on delete cascade,
+	-- foreign key (departmentID,departmentName) references (departmentID,departmentName) on delete cascade
+
+
+
+);
 
 create table Facility
 (
