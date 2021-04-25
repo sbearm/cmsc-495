@@ -28,8 +28,6 @@ create table Facility
 	facilityID number primary key not null,
 	buildingName varchar not null,
 	roomNumber number not null
-
-
 );
 
 insert into Facility (facilityID,buildingName,roomNumber) values(1,"A. James Clark Building", 113);
@@ -55,9 +53,6 @@ Major varchar not null,
 GPA real,
 
 foreign key (userID,userType) references User (userID,userType) on delete cascade
-
-
-
 );
 
 
@@ -65,15 +60,16 @@ foreign key (userID,userType) references User (userID,userType) on delete cascad
 create table instructor(
 instructorID primary key not null,
 userID number  not null,
-userType number  not null,
+userType varchar  not null,
 departmentID number  not null,
 departmentName varchar not null,
 foreign key (userID,userType) references User (userID,userType) on delete cascade,
-foreign key (departmentID,departmentName) references (departmentID,departmentName) on delete cascade
-
-
-
+foreign key (departmentID,departmentName) references Department (departmentID,departmentName) on delete cascade
 );
+
+insert into instructor values (001, 1000, "instructor", 2000, "Computer Science");
+insert into instructor values (002, 1002, "instructor", 2000, "Hacking 101");
+delete from instructor where instructorID = 1;
 
 create table course(
 
@@ -91,6 +87,11 @@ foreign key (departmentID) references Department (departmentID) on delete cascad
 foreign key (facilityID) references Facility (facilityID)
 );
 
+insert into course values (400, "DEV", "3", "Code Stuff", 3, 2, 2000, 1);
+insert into course values (401, "DEV", "3", "Logic Stuff", 3, 2, 2000, 1);
+delete from course where courseID = 401;
+
+
 create table enrollment(
 
 enrollmentID number primary key not null,
@@ -98,11 +99,32 @@ studentID number not null,
 courseID number not null,
 dateEnrolled date not null,
 foreign key (studentID) references student (studentID) on delete cascade,
-foreign key (courseID) reference course (courseID) on delete cascade
-
-
-
-
-
-
+foreign key (courseID) references course (courseID) on delete cascade
 );
+
+SELECT 
+            courseID, 
+            courseName, 
+            creditHours, 
+            course.instructorID AS Course, 
+            instructor.userID AS Instructor, 
+            users.name AS Name
+        FROM
+            course 
+        INNER JOIN instructor on instructor.instructorID = course.instructorID 
+        INNER JOIN users on users.userID = instructor.userID;
+
+		SELECT 
+            courseID, 
+            courseName, 
+            creditHours, 
+            course.instructorID AS Course, 
+            instructor.userID AS Instructor, 
+            users.name AS Name
+        FROM
+            course 
+        INNER JOIN instructor on instructor.instructorID = course.instructorID 
+        INNER JOIN users on users.userID = instructor.userID
+        WHERE CourseID = 401;
+
+		SELECT courseID, courseName, creditHours, course.instructorID AS Course, instructor.userID AS Instructor, users.name AS Name FROM course INNER JOIN instructor on instructor.instructorID = course.instructorID INNER JOIN users on users.userID = instructor.userID where courseID = 401;
