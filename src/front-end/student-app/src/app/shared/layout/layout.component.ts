@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
 
+  userType: string;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.userType = 'student'
   }
 
 }

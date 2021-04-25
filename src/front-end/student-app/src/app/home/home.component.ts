@@ -13,7 +13,6 @@ export class HomeComponent implements OnInit {
   name: string
 
   ngOnInit(): void {
-    this.name = this.authenticationService.currentUserValue.email
   }
 
 }

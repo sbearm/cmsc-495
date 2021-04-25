@@ -4,15 +4,15 @@
     <ul nz-menu nzTheme="dark" nzMode="inline" *appShowAuthed >
       <li nz-menu-item>
         <i nz-icon nzType="form"></i>
-        <span>My Classes</span>
+        <a [routerLink]="'/' + userType + '/classes'">My Classes</a>
       </li>
       <li nz-menu-item>
         <i nz-icon nzType="alert"></i>
-        <span>My Grades</span>
+        <a [routerLink]="'/' + userType + '/grades'">My Grades</a>
       </li>
       <li nz-menu-item>
         <i nz-icon nzType="book"></i>
-        <span>My Assignments</span>
+        <a [routerLink]="'/' + userType + '/assignments'">My Assignments</a>
       </li>
     </ul>
   </nz-sider>
