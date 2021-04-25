@@ -59,14 +59,14 @@ create table student(
 
 studentID number primary key not null,
 userID number  not null,
-userType number  not null,
+userType varchar  not null,
 Major varchar not null,
 GPA real,
 
-foreign key (userID,userType) references User (userID,userType) on delete cascade
+foreign key (userID,userType) references Users (userID,userType) on delete cascade
 );
 
-
+INSERT into student VALUES (1,1001,'student','computers',4.0)
 
 create table instructor(
 instructorID primary key not null,
@@ -113,6 +113,8 @@ foreign key (studentID) references student (studentID) on delete cascade,
 foreign key (courseID) references course (courseID) on delete cascade
 );
 
+INSERT into enrollment VALUES (500,1,400,DATE())
+
 SELECT 
             courseID, 
             courseName, 
@@ -139,3 +141,43 @@ SELECT
         WHERE CourseID = 401;
 
 		SELECT courseID, courseName, creditHours, course.instructorID AS Course, instructor.userID AS Instructor, users.name AS Name FROM course INNER JOIN instructor on instructor.instructorID = course.instructorID INNER JOIN users on users.userID = instructor.userID where courseID = 401;
+
+        select 
+                    c.courseID, 
+                    courseName, 
+                    creditHours, 
+                    c.instructorID AS instructorId,
+                    u.name AS instructorName,
+                    i.departmentName,
+                    1 as registered
+                from course c
+                INNER JOIN instructor i on i.instructorID = c.instructorID 
+                INNER JOIN users u on u.userID = i.userID
+                where courseID not in (
+                    select courseID from enrollment e
+                    inner join student s 
+                    on s.studentID = e.studentID
+                    inner join Users u
+                    on s.userId = u.userID
+                    where u.userID = 1001
+                )
+                union
+                select 
+                    c.courseID, 
+                    courseName, 
+                    creditHours, 
+                    c.instructorID AS instructorId,
+                    u.name AS instructorName,
+                    i.departmentName,
+                    0 as registered
+                from course c
+                INNER JOIN instructor i on i.instructorID = c.instructorID 
+                INNER JOIN users u on u.userID = i.userID
+                where courseID in (
+                    select courseID from enrollment e
+                    inner join student s 
+                    on s.studentID = e.studentID
+                    inner join Users u
+                    on s.userId = u.userID
+                    where u.userID = 1001
+                )

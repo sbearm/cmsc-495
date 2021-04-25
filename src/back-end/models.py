@@ -20,8 +20,9 @@ class Classes:
         self.courseName = data[1]
         self.creditHours = data[2]
         self.instructorID = data[3]
-        self.userID = data[4]
-        self.name = data [5]
+        self.name = data [4]
+        self.departmentName = data[5]
+        self.registered = bool(data[6])
 
     @property
     def serialized(self):
@@ -30,6 +31,28 @@ class Classes:
             'courseName': self.courseName,
             'creditHours': self.creditHours,
             'instructorID': self.instructorID,
-            'userID': self.userID,
-            'name': self.name
+            'name': self.name,
+            'departmentName': self.departmentName,
+            'registered': self.registered            
+        }
+
+class ClassDetail:
+
+    def __init__(self, data):
+        self.courseID = data[0]
+        self.courseName = data[1]
+        self.creditHours = data[2]
+        self.instructorID = data[3]
+        self.name = data [4]
+        self.departmentName = data[5]
+
+    @property
+    def serialized(self):
+        return {
+            'courseID': self.courseID,
+            'courseName': self.courseName,
+            'creditHours': self.creditHours,
+            'instructorID': self.instructorID,
+            'name': self.name,
+            'departmentName': self.departmentName           
         }
