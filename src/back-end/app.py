@@ -32,7 +32,7 @@ def token_required(f):
                 return {'Error': 'Token is required'}
             data = jwt.decode(token, app.config['SECRET_KEY'])
             userID = data['Id']
-            current_user = db.query_single('select name, userType, userID from Users where userID = ?', [userID])
+            current_user = db.query_single('select firstname, lastname, userType, userID from Users where userID = ?', [userID])
             if (current_user is None):
                 return {'Error': 'Token does not match user'}
             else:
@@ -48,17 +48,17 @@ def token_required(f):
 def register():
     auth = request.json
 
-    if(auth['email'] and auth['password']):
+    if(auth['emailaddress'] and auth['password']):
         user = db.query_single(
-            'select * from Users where email = ?', [auth['email']])
+            'select * from Users where emailaddress = ?', [auth['emailaddress']])
 
         if(user):
             return {'error': 'Email is already in use'}, 400
 
         hashed_password = generate_password_hash(auth['password'])
 
-        db.execute("insert into Users(name, email, userType, password) values(?, ?, 'Student', ?)", [
-                   auth['name'], auth['email'], hashed_password])
+        db.execute("insert into Users(firstname, lastname, emailaddress, password) values(?, ?, ?, ?)", [
+                   auth['firstname'], auth['lastname'], auth['emailaddress'], hashed_password])
 
         return jsonify({'data': 'Successfully registered'})
 
@@ -71,21 +71,22 @@ def register():
 def login():
     auth = request.json
 
-    if(auth['email'] is None or auth['password']):
+    if(auth['emailaddress'] is None or auth['password']):
 
         user = db.query_single(
-            'select userID, userType, name, email, password from users where email = ?', [auth['email']])
+            'select userID, firstname, lastname, emailaddress, userType, password from users where emailaddress = ?', [auth['emailaddress']])
 
         if not user:
             return jsonify({'error': 'No records found for email'}, 401)
 
-        if check_password_hash(user[4], auth['password']):
+        if check_password_hash(user[5], auth['password']):
             token = jwt.encode({
                 'Id': user[0],
-                'userType': user[1],
-                'name': user[2],
+                'firstname': user[1],
+                'lastname': user[2],
+                'userType': user[4],
                 'exp': datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET_KEY']).decode('utf-8')
-            return jsonify({'token': token, 'userID': user[0], 'userType': user[1], 'name': user[2]})
+            return jsonify({'token': token, 'userID': user[0], 'userType': user[4], 'firstname': user[1], 'lastname': user[2]})
     else:
         return jsonify({'Error': 'Need to provide credentials'})
 
@@ -95,15 +96,50 @@ def login():
 @cross_origin()
 def authTest(current_user):
     return jsonify({
-        'username': current_user, 
-        'usertype': userType
+        'firstname': current_user[0],
+        'lastname': current_user[1], 
+        'usertype': current_user[2],
+        'userID': current_user[3] 
     })
 
 
-@app.route('/registration', methods=['GET'])
+@app.route('/courseregistration', methods=['POST'])
 @token_required
 @cross_origin()
 def classregistration(current_user):
+    
+    auth = request.json
+
+    if(auth['studentID'] and auth['courseID']):
+
+        enrolled = db.query_single(
+            """
+            select * 
+            from enrollment e
+            inner join student s on s.studentid = e.studentid
+            inner join users u on u.userid = s.userid
+            where u.userID = ? and e.courseid = ?""", [current_user[3],auth['courseID']]
+        )
+
+        #if studentID already enrolled for courseID....
+        if (enrolled):
+            return jsonify({'error': 'already enrolled for course'}, 401)
+
+        #insert enrollmentID, studentID, courseID, dateEnrolled into enrollment table
+        db.execute("insert into enrollment(studentID, courseID, dateEnrolled) values (?, ?, Date())", [
+                   auth['studentID'], auth['courseID']])
+
+        return jsonify({'data': 'Successfully enrolled'})
+
+    else:
+        return jsonify({'Error': 'Need to provide userID & courseID'})
+    
+
+
+@app.route('/classes', methods=['GET'])
+@token_required
+@cross_origin()
+def allclasses(current_user):
     try:
         resp = db.query_all(
             """
@@ -112,7 +148,8 @@ def classregistration(current_user):
                     courseName, 
                     creditHours, 
                     c.instructorID AS instructorId,
-                    u.name AS instructorName,
+                    u.firstname AS instructorFirstName,
+                    u.lastname AS instructorLastName,
                     i.departmentName,
                     0 as registered
                 from course c
@@ -132,7 +169,8 @@ def classregistration(current_user):
                     courseName, 
                     creditHours, 
                     c.instructorID AS instructorId,
-                    u.name AS instructorName,
+                    u.firstname AS instructorName,
+                    u.lastname AS instructorLastName,
                     i.departmentName,
                     1 as registered
                 from course c
@@ -146,7 +184,7 @@ def classregistration(current_user):
                     on s.userId = u.userID
                     where u.userID = ?
                 )
-            """, [current_user[2], current_user[2]]
+            """, [current_user[3], current_user[3]]
             )
         courses = []
         for course in resp:
@@ -172,7 +210,8 @@ def classdetail(current_user, courseid):
             courseName, 
             creditHours, 
             c.instructorID AS instructorId,
-            u.name AS instructorName,
+            u.firstname AS instructorFirstName,
+            u.lastname AS instructorLastName,
             i.departmentName
         from course c
         INNER JOIN instructor i on i.instructorID = c.instructorID 

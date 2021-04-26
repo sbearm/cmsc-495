@@ -2,15 +2,19 @@ class Student:
 
     def __init__(self, data):
         self.id = data[0]
-        self.name = data[1]
-        self.email = data[2]
+        self.firstname = data[1]
+        self.lastname = data[2]
+        self.email = data[3]
+        self.userType = data[4]
 
     @property
     def serialized(self):
         return {
             'id': self.id,
-            'name': self.name,
-            'email': self.email
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'email': self.email,
+            'userType': self.userType
         }
 
 class Classes:
@@ -20,9 +24,10 @@ class Classes:
         self.courseName = data[1]
         self.creditHours = data[2]
         self.instructorID = data[3]
-        self.name = data [4]
-        self.departmentName = data[5]
-        self.registered = bool(data[6])
+        self.firstname = data [4]
+        self.lastname = data [5]
+        self.departmentName = data[6]
+        self.registered = bool(data[7])
 
     @property
     def serialized(self):
@@ -31,7 +36,8 @@ class Classes:
             'courseName': self.courseName,
             'creditHours': self.creditHours,
             'instructorID': self.instructorID,
-            'name': self.name,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
             'departmentName': self.departmentName,
             'registered': self.registered            
         }
@@ -43,8 +49,9 @@ class ClassDetail:
         self.courseName = data[1]
         self.creditHours = data[2]
         self.instructorID = data[3]
-        self.name = data [4]
-        self.departmentName = data[5]
+        self.firstname = data [4]
+        self.lastname = data [5]
+        self.departmentName = data[6]
 
     @property
     def serialized(self):
@@ -53,6 +60,7 @@ class ClassDetail:
             'courseName': self.courseName,
             'creditHours': self.creditHours,
             'instructorID': self.instructorID,
-            'name': self.name,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
             'departmentName': self.departmentName           
         }
