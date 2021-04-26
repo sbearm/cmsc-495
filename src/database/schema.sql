@@ -8,6 +8,29 @@ create table Users
 	password varchar not null
 );
 
+CREATE TABLE "users" (
+	"userID"	integer PRIMARY KEY AUTOINCREMENT,
+	"firstName"	varchar NOT NULL,
+	"lastName"	varchar NOT NULL,
+	"emailAddress"	varchar NOT NULL,
+	"password"	varchar NOT NULL,
+	"userType"	varchar,
+	"homeAddress"	varchar,
+	"city"	varchar,
+	"state"	varchar,
+	"zipCode"	number
+);
+drop table users;
+DELETE from users where userID = 1;
+UPDATE users SET userType = "student",homeAddress = "1020 Edison Avenue",city = "Fresno",state = "CA",zipCode = 93703 WHERE userID = 1;
+UPDATE users SET userType = "instructor",homeAddress = "30 Brandywine Drive",city = "Temple Hills",state = "MD",zipCode = 20748 WHERE userID = 2;
+UPDATE users SET userType = "student",homeAddress = "1600 Westbrook Drive",city = "Gainesville",state = "VA",zipCode = 20155 WHERE userID = 3;
+UPDATE users SET userType = "instructor",homeAddress = "45 Washington Road",city = "Dallas",state = "TX",zipCode = 75007 WHERE userID = 4;
+UPDATE users SET userType = "instructor",homeAddress = "23 Black Pines Road",city = "Santa Monica",state = "CA",zipCode = 90401 WHERE userID = 5;
+UPDATE users SET userType = "student",homeAddress = "102 Seneca Street",city = "Oxon Hill",state = "MD",zipCode = 20748 WHERE userID = 6;
+UPDATE users SET userType = "student",homeAddress = "2039 Jackson Ave",city = "Laurel",state = "MD",zipCode = 20723 WHERE userID = 7;
+UPDATE users SET userType = "instructor",homeAddress = "1000 Pacific Road",city = "Grand Forks",state = "ND",zipCode = 58201 WHERE userID = 8;
+
 create table Students (
 
 	studentID number primary key not null,
@@ -98,14 +121,15 @@ foreign key (departmentID) references Department (departmentID) on delete cascad
 foreign key (facilityID) references Facility (facilityID)
 );
 
-insert into course values (400, "DEV", "3", "Code Stuff", 3, 2, 2000, 1);
-insert into course values (401, "DEV", "3", "Logic Stuff", 3, 2, 2000, 1);
+insert into course values (400, "DEV", "3", "Code Stuff", 3, 2000, 3000, 5000);
+insert into course values (401, "DEV", "3", "Logic Stuff", 3, 2003, 3002, 5004);
 delete from course where courseID = 401;
 
+drop table enrollment;
 
 create table enrollment(
 
-enrollmentID number primary key not null,
+enrollmentID integer PRIMARY KEY AUTOINCREMENT,
 studentID number not null,
 courseID number not null,
 dateEnrolled date not null,
@@ -113,7 +137,7 @@ foreign key (studentID) references student (studentID) on delete cascade,
 foreign key (courseID) references course (courseID) on delete cascade
 );
 
-INSERT into enrollment VALUES (500,1,400,DATE())
+INSERT into enrollment (studentID,courseID,dateEnrolled) VALUES (1001,400,DATE())
 
 SELECT 
             courseID, 
@@ -147,7 +171,7 @@ SELECT
                     courseName, 
                     creditHours, 
                     c.instructorID AS instructorId,
-                    u.name AS instructorName,
+                    u.firstname AS instructorName,
                     i.departmentName,
                     1 as registered
                 from course c
@@ -167,7 +191,7 @@ SELECT
                     courseName, 
                     creditHours, 
                     c.instructorID AS instructorId,
-                    u.name AS instructorName,
+                    u.firstname AS instructorName,
                     i.departmentName,
                     0 as registered
                 from course c
@@ -181,3 +205,50 @@ SELECT
                     on s.userId = u.userID
                     where u.userID = 1001
                 )
+
+                select 
+                    c.courseID, 
+                    courseName, 
+                    creditHours, 
+                    c.instructorID AS instructorId,
+                    u.firstname AS instructorName,
+                    u
+                    i.departmentName,
+                    0 as registered
+                from course c
+                INNER JOIN instructor i on i.instructorID = c.instructorID 
+                INNER JOIN users u on u.userID = i.userID
+                where courseID not in (
+                    select courseID from enrollment e
+                    inner join student s 
+                    on s.studentID = e.studentID
+                    inner join Users u
+                    on s.userId = u.userID
+                    where u.userID = 1
+                )
+                union
+                select 
+                    c.courseID, 
+                    courseName, 
+                    creditHours, 
+                    c.instructorID AS instructorId,
+                    u.firstname AS instructorName,
+                    i.departmentName,
+                    1 as registered
+                from course c
+                INNER JOIN instructor i on i.instructorID = c.instructorID 
+                INNER JOIN users u on u.userID = i.userID
+                where courseID in (
+                    select courseID from enrollment e
+                    inner join student s 
+                    on s.studentID = e.studentID
+                    inner join Users u
+                    on s.userId = u.userID
+                    where u.userID = 1
+                )
+
+        select * 
+            from enrollment e
+            inner join student s on s.studentid = e.studentid
+            inner join users u on u.userid = s.userid
+            where u.userID = 1
