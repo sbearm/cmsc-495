@@ -1,8 +1,20 @@
 export interface Class {
-    id: number,
-    name: string,
-    time: string,
-    semester: string,
-    beginning: Date,
-    end: Date
+    courseID: number,
+    courseName: string,
+    creditHours: number,
+    departmentName: string,
+    firstname: string,
+    lastname: string,
+    instructorID: number,
+    registered: boolean
+}
+
+export interface ClassDetail {
+    courseID: number,
+    courseName: string,
+    creditHours: number,
+    departmentName: string,
+    firstname: string,
+    lastname: string,
+    instructorID: number,
 }

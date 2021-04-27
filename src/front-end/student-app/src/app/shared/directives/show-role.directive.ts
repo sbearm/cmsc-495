@@ -15,7 +15,7 @@ export class ShowRoleDirective {
 
   ngOnInit() {
 
-      if (this.authenticationService.currentUserValue.role == this.condition) {
+      if (this.authenticationService.currentUserValue.userType == this.condition) {
         this.viewContainer.createEmbeddedView(this.templateRef);
       } else {
         this.viewContainer.clear();

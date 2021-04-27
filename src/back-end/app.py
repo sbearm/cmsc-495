@@ -31,7 +31,7 @@ def token_required(f):
             if (token is None):
                 return {'Error': 'Token is required'}
             data = jwt.decode(token, app.config['SECRET_KEY'])
-            userID = data['Id']
+            userID = data['userID']
             current_user = db.query_single('select firstname, lastname, userType, userID from Users where userID = ?', [userID])
             if (current_user is None):
                 return {'Error': 'Token does not match user'}
@@ -67,7 +67,6 @@ def register():
 
 
 @app.route('/login', methods=['POST'])
-@cross_origin()
 def login():
     auth = request.json
 
@@ -81,7 +80,7 @@ def login():
 
         if check_password_hash(user[5], auth['password']):
             token = jwt.encode({
-                'Id': user[0],
+                'userID': user[0],
                 'firstname': user[1],
                 'lastname': user[2],
                 'userType': user[4],
@@ -92,8 +91,8 @@ def login():
 
 
 @app.route('/home', methods=['GET'])
-@token_required
 @cross_origin()
+@token_required
 def authTest(current_user):
     return jsonify({
         'firstname': current_user[0],
@@ -104,13 +103,15 @@ def authTest(current_user):
 
 
 @app.route('/courseregistration', methods=['POST'])
-@token_required
 @cross_origin()
+@token_required
 def classregistration(current_user):
     
     auth = request.json
 
-    if(auth['studentID'] and auth['courseID']):
+    studentRecord = db.query_single("select studentId from student where userId = ?", [current_user[3]])
+
+    if(auth['courseID']):
 
         enrolled = db.query_single(
             """
@@ -127,7 +128,7 @@ def classregistration(current_user):
 
         #insert enrollmentID, studentID, courseID, dateEnrolled into enrollment table
         db.execute("insert into enrollment(studentID, courseID, dateEnrolled) values (?, ?, Date())", [
-                   auth['studentID'], auth['courseID']])
+                   studentRecord[0], auth['courseID']])
 
         return jsonify({'data': 'Successfully enrolled'})
 
@@ -137,8 +138,8 @@ def classregistration(current_user):
 
 
 @app.route('/classes', methods=['GET'])
-@token_required
 @cross_origin()
+@token_required
 def allclasses(current_user):
     try:
         resp = db.query_all(
@@ -189,9 +190,7 @@ def allclasses(current_user):
         courses = []
         for course in resp:
             courses.append(Classes(data=course))
-        return jsonify({
-            'data': [result.serialized for result in courses]
-        })
+        return jsonify([result.serialized for result in courses])
 
     except Exception as err:
             print(err)
@@ -199,8 +198,8 @@ def allclasses(current_user):
 
 
 @app.route("/coursedetail/<courseid>", methods=['GET'])
-@token_required
 @cross_origin()
+@token_required
 def classdetail(current_user, courseid):
     try:
         resp = db.query_single(
