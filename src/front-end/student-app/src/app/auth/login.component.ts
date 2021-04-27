@@ -18,33 +18,6 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService
   ) {}
 
-  submitForm(): void {
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[i].markAsDirty();
-      this.validateForm.controls[i].updateValueAndValidity();
-    }
-
-    let creds = this.validateForm.value;
-
-    this.authenticationService.login(creds).subscribe(
-      (succ) => {
-        this.router.navigate(['/home']);
-      },
-      (err) => {}
-    );
-  }
-
-  quickLogin(): void {
-    let creds = this.validateForm.value;
-
-    this.authenticationService.register(creds).subscribe(
-      (succ) => {
-        this.router.navigate(['/home']);
-      },
-      (err) => {}
-    );
-  }
-
   ngOnInit(): void {
     if (this.authenticationService.currentUserValue != null) {
       this.router.navigate(['/home']);
@@ -55,4 +28,37 @@ export class LoginComponent implements OnInit {
       name: ['Sam'],
     });
   }
+
+  submitForm(): void {
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
+    }
+
+    let form = this.validateForm.value;
+
+    let creds = {'emailaddress': form.email, 'password': form.password };
+
+    this.authenticationService.login(creds).subscribe(
+      (succ) => {
+        this.router.navigate(['/home']);
+      },
+      (err) => {}
+    );
+  }
+
+  quickLogin(): void {
+    let form = this.validateForm.value;
+
+    let creds = {'emailaddress': form.email, 'password': form.password };
+
+    this.authenticationService.register(creds).subscribe(
+      (succ) => {
+        this.router.navigate(['/home']);
+      },
+      (err) => {}
+    );
+  }
+
+  
 }

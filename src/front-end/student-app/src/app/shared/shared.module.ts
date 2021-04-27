@@ -15,8 +15,6 @@ import { ShowAuthedDirective } from './directives/show-authed.directive';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    FormsModule,
-    ReactiveFormsModule,
     NgZorroModule,
     RouterModule
   ],

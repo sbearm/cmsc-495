@@ -2,8 +2,9 @@ POST http://127.0.0.1:5000/register HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Tom",
-    "email": "tom@me.com",
+    "emailaddress": "sbearman@student.vassa.edu",
+    "firstname": "Sam",
+    "lastname": "Bearman",
     "password": "password"
 }
 
@@ -16,6 +17,6 @@ content-type: application/json
     "password": "password"
 }
 
-GET http://127.0.0.1:5000/authTest HTTP/1.1
+GET http://127.0.0.1:5000/classes HTTP/1.1
 content-type: application/json
-Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJZCI6MiwiZXhwIjoxNjE4Nzc4NjU4fQ.rT2uDxoaboaNn9CTW44T2GoRZbl3X0OY7KwYQ9cygeA
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJZCI6OSwiZmlyc3RuYW1lIjoiU2FtIiwibGFzdG5hbWUiOiJCZWFybWFuIiwidXNlclR5cGUiOm51bGwsImV4cCI6MTYxOTQ4MzY3OH0.1yiK1x25aHfL2r6W7JluGORWln_imw6ftzIk-NENrGU

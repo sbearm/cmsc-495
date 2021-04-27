@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { CoreModule } from '../core/core.module';
 import { AuthRoutingModule } from './auth-routing.module';
 import { RegisterComponent } from './register.component';
+import { AuthInterceptor } from './auth.interceptor';
 
 
 
@@ -15,6 +16,7 @@ import { RegisterComponent } from './register.component';
     SharedModule,
     CoreModule,
     AuthRoutingModule
-  ]
+  ],
+  providers: [AuthInterceptor]
 })
 export class AuthModule { }

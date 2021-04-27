@@ -1,6 +1,7 @@
 export interface User {
-    id: string;
-    email: string;
-    role: string;
-    token: string;
+    userID: number,
+    userType: string,
+    firstname: string,
+    lastname: string,
+    token: string,
   }

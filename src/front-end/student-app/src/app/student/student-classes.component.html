@@ -1,22 +1,29 @@
 <nz-table #basicTable [nzData]="classes">
   <thead>
     <tr>
-      <th>Class Id</th>
+      <th>ClassId</th>
       <th>Name</th>
-      <th>Time</th>
-      <th>Semester</th>
-      <th>Availibility</th>
+      <th>Credit Hours</th>
+      <th>Department</th>
+      <th>Instuctor</th>
+      <th>Register</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of basicTable.data">
-      <td>{{ data.id }}</td>
+      <td>{{ data.courseID }}</td>
       <td>
-        <a [routerLink]="" (click)="toggleDialog()">{{ data.name }}</a>
+        <a [routerLink]="" (click)="toggleDialog(data.courseID)">{{
+          data.courseName
+        }}</a>
       </td>
-      <td>{{ data.time }}</td>
-      <td>{{ data.semester }}</td>
-      <td>{{ data.beginning | date }} - {{ data.end | date }}</td>
+      <td>{{ data.creditHours }}</td>
+      <td>{{ data.departmentName }}</td>
+      <td>{{ data.firstname }}, {{ data.lastname }}</td>
+      <td> 
+        <button nz-button nzType="primary" disabled *ngIf="data.registered" nzDanger>Register</button>
+        <button nz-button nzType="primary" *ngIf="!data.registered" nzDanger (click)="register(data.courseID)">Register</button>
+      </td>
     </tr>
   </tbody>
 </nz-table>
@@ -25,16 +32,12 @@
   [nzTitle]="modalTitle"
   [nzContent]="modalContent"
   [nzFooter]="modalFooter"
-  (nzOnCancel)="toggleDialog()"
+  (nzOnCancel)="closeDialog()"
 >
   <ng-template #modalTitle>Custom Modal Title</ng-template>
 
   <ng-template #modalContent>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
+    <p>{{ currentClass.courseName }}</p>
   </ng-template>
 
   <ng-template #modalFooter>
