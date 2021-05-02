@@ -17,6 +17,34 @@ class Student:
             'userType': self.userType
         }
 
+class User:
+
+    def __init__(self, data):
+        self.userID = data[0]
+        self.firstname = data[1]
+        self.lastname = data[2]
+        self.emailaddress = data[3]
+        self.userType = data[4]
+        self.homeaddress = data[5]
+        self.city = data[6]
+        self.state = data[7]
+        self.zipcode = data[8]
+
+
+    @property
+    def serialized(self):
+        return {
+            'userID': self.userID,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'emailaddress': self.emailaddress,
+            'userType': self.userType,
+            'homeaddress': self.homeaddress,
+            'city': self.city,
+            'state': self.state,
+            'zipcode': self.zipcode
+        }
+
 class Classes:
 
     def __init__(self, data):

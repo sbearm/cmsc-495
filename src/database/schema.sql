@@ -252,3 +252,24 @@ SELECT
             inner join student s on s.studentid = e.studentid
             inner join users u on u.userid = s.userid
             where u.userID = 1
+
+select userID, firstname, lastname, emailaddress, usertype, homeaddress, city, state, zipcode from Users where userID = 3
+
+INSERT into enrollment (studentID,courseID,dateEnrolled) VALUES (1001,400,DATE())
+
+UPDATE users SET city = NULL WHERE userID = 3
+update users set city) values ('Tallahassee') where userid = 3
+
+ALTER TABLE enrollment ADD COLUMN finalgrade varchar
+
+select 
+            e.courseID,
+            e.studentID,
+            c.courseName,
+            c.instructorID,
+            u.firstname
+        from enrollment e
+            INNER JOIN course c on c.courseID = e.courseID
+            INNER JOIN instructor i on i.instructorID = c.instructorID 
+            INNER JOIN users u on u.userID = i.userID
+            where u.userID = 2

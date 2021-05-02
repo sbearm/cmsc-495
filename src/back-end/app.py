@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from flask_cors import CORS, cross_origin
 from database import Database
 import sqlite3
-from models import Student, Classes, ClassDetail
+from models import Student, Classes, ClassDetail, User
 from functools import wraps
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -93,7 +93,7 @@ def login():
 @app.route('/home', methods=['GET'])
 @cross_origin()
 @token_required
-def authTest(current_user):
+def home(current_user):
     return jsonify({
         'firstname': current_user[0],
         'lastname': current_user[1], 
@@ -122,11 +122,9 @@ def classregistration(current_user):
             where u.userID = ? and e.courseid = ?""", [current_user[3],auth['courseID']]
         )
 
-        #if studentID already enrolled for courseID....
         if (enrolled):
             return jsonify({'error': 'already enrolled for course'}, 401)
 
-        #insert enrollmentID, studentID, courseID, dateEnrolled into enrollment table
         db.execute("insert into enrollment(studentID, courseID, dateEnrolled) values (?, ?, Date())", [
                    studentRecord[0], auth['courseID']])
 
@@ -134,7 +132,6 @@ def classregistration(current_user):
 
     else:
         return jsonify({'Error': 'Need to provide userID & courseID'})
-    
 
 
 @app.route('/classes', methods=['GET'])
@@ -224,6 +221,120 @@ def classdetail(current_user, courseid):
     except Exception as err:
         print(err)
         return {'Error': 'Logic Error'}
+
+
+@app.route('/teacher', methods=['GET'])
+@cross_origin()
+@token_required
+def teacher(current_user):
+    #get studentID and courseID from enrollment
+    #get instructorID and courseID from course
+    #get firstname and lastname from instructor where instructoriD = ?
+    #get firstname and lastname from student where studentID = ?
+    columns_to_be_jsonified = ['studentID', 'userID']
+    genredict = {}
+
+    coursequery = db.query_all(
+        """
+        select 
+            e.courseID,
+            e.studentID,
+            c.courseName,
+            c.instructorID,
+            u.firstname
+        from enrollment e
+            INNER JOIN course c on c.courseID = e.courseID
+            INNER JOIN instructor i on i.instructorID = c.instructorID 
+            INNER JOIN users u on u.userID = i.userID
+            where u.userID = ?
+        """, [current_user[3]]
+    )
+
+    for course in coursequery:
+        coursetup = course.courseID, course.courseName
+        studentdict = {}
+        for column in columns_to_be_jsonified:
+            studentdict[column] = getattr(movie, column)
+
+        if coursetup in genredict:
+            genredict[coursetup].append(studentdict)
+        else:
+            genredict[coursetup] = [studentdict]
+
+    return jsonify(genredict)
+
+
+@app.route('/postgrade', methods=['POST'])
+@cross_origin()
+@token_required
+def postgrade(current_user):
+
+    updates = request.json
+    finalgrade = updates['finalgrade']
+    validgrades = ['A','B','C','D','F']
+
+    if finalgrade in validgrades:
+
+        db.execute("""
+        UPDATE enrollment 
+        SET finalgrade = ?
+        WHERE enrollmentID = ?
+        """, 
+        [
+            updates['finalgrade'],
+            updates['enrollmentID']
+        ])
+    
+        return jsonify({'data': 'Successfully updated grade'})
+
+    else:
+        return jsonify({'data': 'Not a valid grade'})
+
+
+
+@app.route('/profile', methods=['GET'])
+@cross_origin()
+@token_required
+def profile(current_user):
+    try:
+        resp = db.query_single('select userID, firstname, lastname, emailaddress, usertype, homeaddress, city, state, zipcode from Users where userID = ?', [current_user[3]])
+        result = User(data=resp)
+        return jsonify(result.serialized)
+    except Exception as err:
+        print(err)
+        return {'Error': 'Logic Error'}
+
+
+@app.route('/profileupdate', methods=['POST'])
+@cross_origin()
+@token_required
+def profileupdate(current_user):
+    
+    updates = request.json
+
+    db.execute("""
+    UPDATE users 
+    SET firstname = ?,
+        lastname = ?,
+        emailaddress = ?,
+        homeaddress = ?,
+        city = ?,
+        state = ?,
+        zipcode = ?
+    WHERE userID = ?
+    """, 
+    [
+        updates['firstname'],
+        updates['lastname'],
+        updates['emailaddress'],
+        updates['homeaddress'],
+        updates['city'],
+        updates['state'],
+        updates['zipcode'],
+        current_user[3]
+    ])
+
+    return jsonify({'data': 'Successfully updated profile'})
 
 
 if __name__ == '__main__':
