@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
   selector: 'app-layout',
@@ -9,9 +10,10 @@ export class LayoutComponent implements OnInit {
 
   userType: string = 'student';
 
-  constructor() { }
+  constructor(private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+    this.userType = this.authenticationService.currentUserValue.userType
     
   }
 

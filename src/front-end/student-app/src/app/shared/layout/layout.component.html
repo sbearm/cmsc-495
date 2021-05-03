@@ -2,15 +2,15 @@
   <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
     <h4 class="logo" nz-typography>VASSA</h4>
     <ul nz-menu nzTheme="dark" nzMode="inline" *appShowAuthed="true" >
-      <li nz-menu-item>
+      <li nz-menu-item >
         <i nz-icon nzType="form"></i>
         <a [routerLink]="'/' + userType + '/classes'">My Classes</a>
       </li>
-      <li nz-menu-item>
+      <li nz-menu-item *appShowRole="student">
         <i nz-icon nzType="alert"></i>
         <a [routerLink]="'/' + userType + '/grades'">My Grades</a>
       </li>
-      <li nz-menu-item>
+      <li nz-menu-item *appShowRole="student">
         <i nz-icon nzType="book"></i>
         <a [routerLink]="'/' + userType + '/assignments'">My Assignments</a>
       </li>

@@ -113,7 +113,7 @@ def login():
             return jsonify({'Error': 'Need to provide credentials'})
     except Exception as err:
         print(err)
-        return {'Error': err}
+        return {'Error': 'err'}
 
 
 @app.route('/home', methods=['GET'])
@@ -298,7 +298,7 @@ def teacher(current_user):
 
             results.append(course_result.serialized)
 
-        return jsonify({'data': results})
+        return jsonify(results)
 
     except Exception as err:
         print(err)
