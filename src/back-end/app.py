@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from flask_cors import CORS, cross_origin
 from database import Database
 import sqlite3
-from models import Student, Classes, ClassDetail
+from models import Student, Classes, ClassDetail, User, TeacherClass, TeacherStudents
 from functools import wraps
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,6 +22,7 @@ app.config['DATABASE_PATH'] = 'C:\\GitHub\\cmsc-495\\src\\database\\db.db'
 
 
 db = Database(app.config['DATABASE_PATH'])
+
 
 def token_required(f):
     @wraps(f)
@@ -43,103 +44,134 @@ def token_required(f):
     return decorated
 
 
+def allow_role(role):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view(*args, **kwargs):
+            try:
+                token = request.headers.get('Authorization')
+                data = jwt.decode(token, app.config['SECRET_KEY'])
+                if(data['userType'] != role):
+                    return {'Error': 'You are not authorized to look at this'}
+                return fn(*args, **kwargs)
+            except Exception as err:
+                print(err)
+                return {'Error': err}
+        return decorated_view
+    return wrapper
+
+
 @app.route('/register', methods=['POST'])
 @cross_origin()
 def register():
-    auth = request.json
+    try:
+        auth = request.json
 
-    if(auth['emailaddress'] and auth['password']):
-        user = db.query_single(
-            'select * from Users where emailaddress = ?', [auth['emailaddress']])
+        if(auth['emailaddress'] and auth['password']):
+            user = db.query_single(
+                'select * from Users where emailaddress = ?', [auth['emailaddress']])
 
-        if(user):
-            return {'error': 'Email is already in use'}, 400
+            if(user):
+                return {'error': 'Email is already in use'}, 400
 
-        hashed_password = generate_password_hash(auth['password'])
+            hashed_password = generate_password_hash(auth['password'])
 
-        db.execute("insert into Users(firstname, lastname, emailaddress, password) values(?, ?, ?, ?)", [
-                   auth['firstname'], auth['lastname'], auth['emailaddress'], hashed_password])
+            db.execute("insert into Users(firstname, lastname, emailaddress, password) values(?, ?, ?, ?)", [
+                    auth['firstname'], auth['lastname'], auth['emailaddress'], hashed_password])
 
-        return jsonify({'data': 'Successfully registered'})
+            return jsonify({'data': 'Successfully registered'})
 
-    else:
-        return {'error': 'Must provide email and password to register'}, 400
+        else:
+            return {'error': 'Must provide email and password to register'}, 400
+    except Exception as err:
+        print(err)
+        return {'Error': err}
 
 
 @app.route('/login', methods=['POST'])
 def login():
-    auth = request.json
+    try:
+        auth = request.json
 
-    if(auth['emailaddress'] is None or auth['password']):
+        if(auth['emailaddress'] is None or auth['password']):
 
-        user = db.query_single(
-            'select userID, firstname, lastname, emailaddress, userType, password from users where emailaddress = ?', [auth['emailaddress']])
+            user = db.query_single(
+                'select userID, firstname, lastname, emailaddress, userType, password from users where emailaddress = ?', [auth['emailaddress']])
 
-        if not user:
-            return jsonify({'error': 'No records found for email'}, 401)
+            if not user:
+                return jsonify({'error': 'No records found for email'}, 401)
 
-        if check_password_hash(user[5], auth['password']):
-            token = jwt.encode({
-                'userID': user[0],
-                'firstname': user[1],
-                'lastname': user[2],
-                'userType': user[4],
-                'exp': datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET_KEY']).decode('utf-8')
-            return jsonify({'token': token, 'userID': user[0], 'userType': user[4], 'firstname': user[1], 'lastname': user[2]})
-    else:
-        return jsonify({'Error': 'Need to provide credentials'})
+            if check_password_hash(user[5], auth['password']):
+                token = jwt.encode({
+                    'userID': user[0],
+                    'firstname': user[1],
+                    'lastname': user[2],
+                    'userType': user[4],
+                    'exp': datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET_KEY']).decode('utf-8')
+                return jsonify({'token': token, 'userID': user[0], 'userType': user[4], 'firstname': user[1], 'lastname': user[2]})
+        else:
+            return jsonify({'Error': 'Need to provide credentials'})
+    except Exception as err:
+        print(err)
+        return {'Error': err}
 
 
 @app.route('/home', methods=['GET'])
 @cross_origin()
 @token_required
-def authTest(current_user):
-    return jsonify({
+def home(current_user):
+    try:
+        return jsonify({
         'firstname': current_user[0],
         'lastname': current_user[1], 
         'usertype': current_user[2],
         'userID': current_user[3] 
-    })
+        })
+    except Exception as err:
+        print(err)
+        return {'Error': err}
 
 
 @app.route('/courseregistration', methods=['POST'])
 @cross_origin()
 @token_required
+@allow_role('student')
 def classregistration(current_user):
-    
-    auth = request.json
+    try:
+        auth = request.json
 
-    studentRecord = db.query_single("select studentId from student where userId = ?", [current_user[3]])
+        studentRecord = db.query_single("select studentId from student where userId = ?", [current_user[3]])
 
-    if(auth['courseID']):
+        if(auth['courseID']):
 
-        enrolled = db.query_single(
-            """
-            select * 
-            from enrollment e
-            inner join student s on s.studentid = e.studentid
-            inner join users u on u.userid = s.userid
-            where u.userID = ? and e.courseid = ?""", [current_user[3],auth['courseID']]
-        )
+            enrolled = db.query_single(
+                """
+                select * 
+                from enrollment e
+                inner join student s on s.studentid = e.studentid
+                inner join users u on u.userid = s.userid
+                where u.userID = ? and e.courseid = ?""", [current_user[3],auth['courseID']]
+            )
 
-        #if studentID already enrolled for courseID....
-        if (enrolled):
-            return jsonify({'error': 'already enrolled for course'}, 401)
+            if (enrolled):
+                return jsonify({'error': 'already enrolled for course'}, 401)
 
-        #insert enrollmentID, studentID, courseID, dateEnrolled into enrollment table
-        db.execute("insert into enrollment(studentID, courseID, dateEnrolled) values (?, ?, Date())", [
-                   studentRecord[0], auth['courseID']])
+            db.execute("insert into enrollment(studentID, courseID, dateEnrolled) values (?, ?, Date())", [
+                    studentRecord[0], auth['courseID']])
 
-        return jsonify({'data': 'Successfully enrolled'})
+            return jsonify({'data': 'Successfully enrolled'})
 
-    else:
-        return jsonify({'Error': 'Need to provide userID & courseID'})
-    
+        else:
+            return jsonify({'Error': 'Need to provide userID & courseID'})
+    except Exception as err:
+        print(err)
+        return {'Error': 'err'}
 
 
 @app.route('/classes', methods=['GET'])
 @cross_origin()
 @token_required
+@allow_role('student')
 def allclasses(current_user):
     try:
         resp = db.query_all(
@@ -194,12 +226,13 @@ def allclasses(current_user):
 
     except Exception as err:
             print(err)
-            return {'Error': 'Logic Error'}
+            return {'Error': err}
 
 
 @app.route("/coursedetail/<courseid>", methods=['GET'])
 @cross_origin()
 @token_required
+@allow_role('student')
 def classdetail(current_user, courseid):
     try:
         resp = db.query_single(
@@ -223,7 +256,132 @@ def classdetail(current_user, courseid):
 
     except Exception as err:
         print(err)
-        return {'Error': 'Logic Error'}
+        return {'Error': err}
+
+
+@app.route('/teacher', methods=['GET'])
+@cross_origin()
+@token_required
+@allow_role('instructor')
+def teacher(current_user):
+    try:
+        courses = db.query_all(
+            """
+            select c.courseID, c.section, c.hours, c.courseName, u.firstName || ' ' || u.lastName as instructorName
+            from course c
+            INNER JOIN instructor i on i.instructorID = c.instructorID 
+            INNER JOIN users u on u.userID = i.userID
+            where u.userID = ?
+            """, [current_user[3]]
+        )
+
+        results = []
+
+        for course in courses:
+
+            course_result = TeacherClass(course)
+
+            students = db.query_all(""" 
+            select e.courseID, e.enrollmentID, u.firstName, u.lastName 
+            from enrollment e
+            inner join student s on e.studentID = s.studentID
+            inner join users u on u.userID = s.userID
+            where e.courseID = ?
+            """, [course[0]])
+
+            students_result = []
+
+            for student in students:
+                students_result.append(TeacherStudents(student).serialized)
+
+            course_result.students = students_result
+
+            results.append(course_result.serialized)
+
+        return jsonify({'data': results})
+
+    except Exception as err:
+        print(err)
+        return {'Error': err}
+
+
+@app.route('/postgrade', methods=['POST'])
+@cross_origin()
+@token_required
+@allow_role('instructor')
+def postgrade(current_user):
+    try:
+        updates = request.json
+        finalgrade = updates['finalgrade']
+        validgrades = ['A','B','C','D','F']
+
+        if finalgrade in validgrades:
+
+            db.execute("""
+            UPDATE enrollment 
+            SET finalgrade = ?
+            WHERE enrollmentID = ?
+            """, 
+            [
+                updates['finalgrade'],
+                updates['enrollmentID']
+            ])
+        
+            return jsonify({'data': 'Successfully updated grade'})
+
+        else:
+            return jsonify({'data': 'Not a valid grade'})
+    except Exception as err:
+        print(err)
+        return {'Error': "err"}
+
+
+@app.route('/profile', methods=['GET'])
+@cross_origin()
+@token_required
+def profile(current_user):
+    try:
+        resp = db.query_single('select userID, firstname, lastname, emailaddress, usertype, homeaddress, city, state, zipcode from Users where userID = ?', [current_user[3]])
+        result = User(data=resp)
+        return jsonify(result.serialized)
+    except Exception as err:
+        print(err)
+        return {'Error': err}
+
+
+@app.route('/profileupdate', methods=['POST'])
+@cross_origin()
+@token_required
+def profileupdate(current_user):
+    try:
+        updates = request.json
+
+        db.execute("""
+        UPDATE users 
+        SET firstname = ?,
+            lastname = ?,
+            emailaddress = ?,
+            homeaddress = ?,
+            city = ?,
+            state = ?,
+            zipcode = ?
+        WHERE userID = ?
+        """, 
+        [
+            updates['firstname'],
+            updates['lastname'],
+            updates['emailaddress'],
+            updates['homeaddress'],
+            updates['city'],
+            updates['state'],
+            updates['zipcode'],
+            current_user[3]
+        ])
+
+        return jsonify({'data': 'Successfully updated profile'})
+    except Exception as err:
+        print(err)
+        return {'Error': 'err'}
 
 
 if __name__ == '__main__':
