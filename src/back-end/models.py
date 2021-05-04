@@ -120,6 +120,7 @@ class TeacherStudents:
         self.enrollmentID = data[1]
         self.firstName = data[2]
         self.lastName = data[3]
+        self.finalGrade = data[4]
 
     @property
     def serialized(self):
@@ -128,4 +129,5 @@ class TeacherStudents:
             'enrollmentID': self.enrollmentID,
             'firstName': self.firstName,
             'lastName': self.lastName,
+            'finalGrade': self.finalGrade,
         }

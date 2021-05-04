@@ -4,12 +4,14 @@ export interface TeacherClass {
     hours: string,
     instructorName: string,
     section: string,
-    // students: TeacherStudent[]
+    students: TeacherStudent[]
 }
 
 export interface TeacherStudent {
     courseID: number,
     enrollmentID: number,
     firstName: string,
-    lastName: string
+    lastName: string,
+    finalGrade: string,
+    newGrade: string
 }

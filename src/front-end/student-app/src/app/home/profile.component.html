@@ -1,0 +1,71 @@
+<form nz-form [formGroup]="profileForm" (ngSubmit)="submitForm()" *ngIf="profileForm">
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="emailaddress"
+      >E-mail</nz-form-label
+    >
+    <nz-form-control
+      [nzSm]="14"
+      [nzXs]="24"
+    >
+      <input nz-input type="text" id="emailaddress" formControlName="emailaddress" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="firstname" 
+      >FirstName</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input type="text" id="firstname" formControlName="firstname" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="lastname" 
+      >LastName</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input type="text" id="lastname" formControlName="lastname" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="homeaddress" 
+      >Home Address</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-textarea-count [nzMaxCharacterCount]="100">
+        <textarea rows="4" formControlName="homeaddress" nz-input></textarea>
+      </nz-textarea-count>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="city" 
+      >City</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input type="text" id="city" formControlName="city" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="state" 
+      >State</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input type="text" id="state" formControlName="state" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="zipcode" 
+      >ZipCode</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input type="text" id="zipcode" formControlName="zipcode" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control
+      [nzXs]="{ span: 24, offset: 0 }"
+      [nzSm]="{ span: 16, offset: 6 }"
+    >
+      <button nz-button nzType="primary" type="submit">Update</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

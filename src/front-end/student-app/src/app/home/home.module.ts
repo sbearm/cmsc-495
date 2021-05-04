@@ -7,10 +7,11 @@ import { SharedModule } from '../shared/shared.module';
 import { CoreModule } from '../core/core.module';
 import { StudentHomeComponent } from './components/student-home/student-home.component';
 import { TeacherHomeComponent } from './components/teacher-home/teacher-home.component';
+import { ProfileComponent } from './profile.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, StudentHomeComponent, TeacherHomeComponent],
+  declarations: [HomeComponent, StudentHomeComponent, TeacherHomeComponent, ProfileComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,
