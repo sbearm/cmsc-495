@@ -1,29 +1,33 @@
 <nz-layout class="layout">
   <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
-    <h4 class="logo" nz-typography>VASSA</h4>
-    <ul nz-menu nzTheme="dark" nzMode="inline" *appShowAuthed="true" >
+    <a routerLink="/home"><h4 class="logo" nz-typography>VASSA</h4></a>
+    <ul nz-menu nzTheme="dark" nzMode="inline" *appShowAuthed="true">
       <li nz-menu-item>
         <i nz-icon nzType="form"></i>
         <a [routerLink]="'/' + userType + '/classes'">My Classes</a>
       </li>
-      <li nz-menu-item>
+      <li nz-menu-item *appShowRole="student">
         <i nz-icon nzType="alert"></i>
         <a [routerLink]="'/' + userType + '/grades'">My Grades</a>
       </li>
-      <li nz-menu-item>
+      <li nz-menu-item *appShowRole="student">
         <i nz-icon nzType="book"></i>
         <a [routerLink]="'/' + userType + '/assignments'">My Assignments</a>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="user" nzTheme="outline"></i>
+        <a routerLink="/home/profile">My Profile</a>
       </li>
     </ul>
   </nz-sider>
   <nz-layout>
     <nz-header>
-      <h1
-        style="padding-left: 10px; padding-top: 10px; text-align: center"
-        nz-typography
-      >
-        VASSA University - Student Records
-      </h1>
+        <h1
+          style="padding-left: 10px; padding-top: 10px; text-align: center"
+          nz-typography
+        >
+          VASSA University - Student Records
+        </h1>
     </nz-header>
     <nz-content>
       <div class="inner-content">

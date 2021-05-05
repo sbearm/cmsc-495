@@ -40,7 +40,7 @@ def token_required(f):
                 return f(current_user, *args, **kwargs)
         except Exception as err:
             print(err)
-            return {'Error': 'Token is invalid'}
+            return 'Error', 400
     return decorated
 
 
@@ -56,7 +56,7 @@ def allow_role(role):
                 return fn(*args, **kwargs)
             except Exception as err:
                 print(err)
-                return {'Error': err}
+                return 'Error', 401
         return decorated_view
     return wrapper
 
@@ -85,7 +85,7 @@ def register():
             return {'error': 'Must provide email and password to register'}, 400
     except Exception as err:
         print(err)
-        return {'Error': err}
+        return 'Error', 400
 
 
 @app.route('/login', methods=['POST'])
@@ -107,13 +107,13 @@ def login():
                     'firstname': user[1],
                     'lastname': user[2],
                     'userType': user[4],
-                    'exp': datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET_KEY']).decode('utf-8')
+                    'exp': datetime.utcnow() + timedelta(days=5)}, app.config['SECRET_KEY']).decode('utf-8')
                 return jsonify({'token': token, 'userID': user[0], 'userType': user[4], 'firstname': user[1], 'lastname': user[2]})
         else:
             return jsonify({'Error': 'Need to provide credentials'})
     except Exception as err:
         print(err)
-        return {'Error': err}
+        return 'Error', 400
 
 
 @app.route('/home', methods=['GET'])
@@ -129,7 +129,7 @@ def home(current_user):
         })
     except Exception as err:
         print(err)
-        return {'Error': err}
+        return 'Error', 400
 
 
 @app.route('/courseregistration', methods=['POST'])
@@ -165,7 +165,7 @@ def classregistration(current_user):
             return jsonify({'Error': 'Need to provide userID & courseID'})
     except Exception as err:
         print(err)
-        return {'Error': 'err'}
+        return 'Error', 400
 
 
 @app.route('/classes', methods=['GET'])
@@ -226,7 +226,7 @@ def allclasses(current_user):
 
     except Exception as err:
             print(err)
-            return {'Error': err}
+            return 'Error', 400
 
 
 @app.route("/coursedetail/<courseid>", methods=['GET'])
@@ -256,7 +256,7 @@ def classdetail(current_user, courseid):
 
     except Exception as err:
         print(err)
-        return {'Error': err}
+        return 'Error', 400
 
 
 @app.route('/teacher', methods=['GET'])
@@ -282,7 +282,7 @@ def teacher(current_user):
             course_result = TeacherClass(course)
 
             students = db.query_all(""" 
-            select e.courseID, e.enrollmentID, u.firstName, u.lastName 
+            select e.courseID, e.enrollmentID, u.firstName, u.lastName, e.finalGrade 
             from enrollment e
             inner join student s on e.studentID = s.studentID
             inner join users u on u.userID = s.userID
@@ -298,11 +298,11 @@ def teacher(current_user):
 
             results.append(course_result.serialized)
 
-        return jsonify({'data': results})
+        return jsonify(results)
 
     except Exception as err:
         print(err)
-        return {'Error': err}
+        return 'Error', 400
 
 
 @app.route('/postgrade', methods=['POST'])
@@ -333,7 +333,7 @@ def postgrade(current_user):
             return jsonify({'data': 'Not a valid grade'})
     except Exception as err:
         print(err)
-        return {'Error': "err"}
+        return 'Error', 400
 
 
 @app.route('/profile', methods=['GET'])
@@ -346,7 +346,7 @@ def profile(current_user):
         return jsonify(result.serialized)
     except Exception as err:
         print(err)
-        return {'Error': err}
+        return 'Error', 400
 
 
 @app.route('/profileupdate', methods=['POST'])
@@ -381,7 +381,7 @@ def profileupdate(current_user):
         return jsonify({'data': 'Successfully updated profile'})
     except Exception as err:
         print(err)
-        return {'Error': 'err'}
+        return 'Error', 400
 
 
 if __name__ == '__main__':

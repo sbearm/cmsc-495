@@ -1,0 +1,76 @@
+<nz-table nzTitle="Current Classes" #instructorTable [nzData]="classes">
+  <thead>
+    <tr>
+      <th>ClassId</th>
+      <th>Name</th>
+      <th>Credit Hours</th>
+      <th>Instructor</th>
+      <th>Section</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of instructorTable.data">
+      <td>{{ data.courseID }}</td>
+      <td>
+        <a [routerLink]="" (click)="toggleDialog(data.courseID)">{{
+          data.courseName
+        }}</a>
+      </td>
+      <td>{{ data.hours }}</td>
+      <td>{{ data.instructorName }}</td>
+      <td>{{ data.section }}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</nz-table>
+<nz-modal
+  [(nzVisible)]="showClassDialog"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="closeDialog()"
+  nzWidth="1000px"
+>
+  <ng-template #modalTitle>{{ selectedClass.courseName }}</ng-template>
+
+  <ng-template #modalContent>
+    <nz-table
+      nzTitle="Registered Students"
+      #basicTable
+      [nzData]="selectedClass.students"
+    >
+      <thead>
+        <tr>
+          <th>EnrollmentId</th>
+          <th>Name</th>
+          <th>Grade</th>
+          <th>Update Grade</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{ data.enrollmentID }}</td>
+          <td>{{ data.firstName }}, {{ data.lastName }}</td>
+          <td *ngIf="data.finalGrade != ''">{{ data.finalGrade }}</td>
+          <td *ngIf="data.finalGrade === ''">No Grade Posted</td>
+          <td>
+            <nz-select [(ngModel)]="newGrade">
+              <nz-option nzValue="" nzLabel="Select new Grade"></nz-option>
+              <nz-option nzValue="A" nzLabel="A"></nz-option>
+              <nz-option nzValue="B" nzLabel="B"></nz-option>
+              <nz-option nzValue="C" nzLabel="C"></nz-option>
+              <nz-option nzValue="D" nzLabel="D"></nz-option>
+              <nz-option nzValue="F" nzLabel="F"></nz-option>
+            </nz-select>
+          </td>
+          <td>
+            <button nz-button nzType="primary" nzDanger (click)="updateGrade(data.enrollmentID)">Update Grade</button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+  <ng-template #modalFooter> </ng-template>
+</nz-modal>
