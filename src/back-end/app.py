@@ -79,7 +79,9 @@ def register():
             db.execute("insert into Users(firstname, lastname, emailaddress, password) values(?, ?, ?, ?)", [
                     auth['firstname'], auth['lastname'], auth['emailaddress'], hashed_password])
 
-            return jsonify({'data': 'Successfully registered'})
+            if(auth['userType'] == None):
+                return jsonify({'data': 'Successfully registered'})
+
 
         else:
             return {'error': 'Must provide email and password to register'}, 400
@@ -99,9 +101,11 @@ def login():
                 'select userID, firstname, lastname, emailaddress, userType, password from users where emailaddress = ?', [auth['emailaddress']])
 
             if not user:
-                return jsonify({'error': 'No records found for email'}, 401)
+                return 'No records found for email', 400
+            
+            password_check = check_password_hash(user[5], auth['password'])
 
-            if check_password_hash(user[5], auth['password']):
+            if(password_check):
                 token = jwt.encode({
                     'userID': user[0],
                     'firstname': user[1],
@@ -109,8 +113,10 @@ def login():
                     'userType': user[4],
                     'exp': datetime.utcnow() + timedelta(days=5)}, app.config['SECRET_KEY']).decode('utf-8')
                 return jsonify({'token': token, 'userID': user[0], 'userType': user[4], 'firstname': user[1], 'lastname': user[2]})
+            else:
+                return 'Incorrect password', 400
         else:
-            return jsonify({'Error': 'Need to provide credentials'})
+            return 'Need to provide credentials', 400
     except Exception as err:
         print(err)
         return 'Error', 400
@@ -312,7 +318,7 @@ def teacher(current_user):
 def postgrade(current_user):
     try:
         updates = request.json
-        finalgrade = updates['finalgrade']
+        finalgrade = updates['finalGrade']
         validgrades = ['A','B','C','D','F']
 
         if finalgrade in validgrades:
@@ -323,7 +329,7 @@ def postgrade(current_user):
             WHERE enrollmentID = ?
             """, 
             [
-                updates['finalgrade'],
+                updates['finalGrade'],
                 updates['enrollmentID']
             ])
         

@@ -12,6 +12,8 @@ import { AuthenticationService } from '../core/services/authentication.service';
 export class LoginComponent implements OnInit {
   validateForm!: FormGroup;
 
+  loginError: string = '';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -41,9 +43,14 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.login(creds).subscribe(
       (succ) => {
+        localStorage.setItem("currentUser", JSON.stringify(succ));
+        this.authenticationService.setCurrentUserSubject(succ);
         this.router.navigate(['/home']);
       },
-      (err) => {}
+      (err) => {
+        this.loginError = err;
+        console.log(err);
+      }
     );
   }
 

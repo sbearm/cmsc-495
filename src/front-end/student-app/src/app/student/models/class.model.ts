@@ -7,6 +7,7 @@ export interface Class {
     lastname: string,
     instructorID: number,
     registered: boolean
+
 }
 
 export interface ClassDetail {

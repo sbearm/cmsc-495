@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { StudentService } from '../core/services/student.service';
 import { Class, ClassDetail } from './models/class.model';
 
@@ -9,7 +10,7 @@ import { Class, ClassDetail } from './models/class.model';
 })
 export class StudentClassesComponent implements OnInit {
 
-  constructor(private studentService: StudentService) { }
+  constructor(private studentService: StudentService, private message: NzMessageService) { }
 
   classes: Class[] = [];
 
@@ -43,8 +44,11 @@ export class StudentClassesComponent implements OnInit {
   }
 
   register(courseId: number) : void {
-    this.studentService.registerClass(courseId).subscribe(data => {
+    this.studentService.registerClass(courseId).subscribe(succ => {
       this.refreshClasses();
+    },(err) =>{
+      this.message.create('error', `Error Registering`);
+      console.log(err);
     })
   }
 }

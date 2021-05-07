@@ -21,7 +21,7 @@
       <td>{{ data.departmentName }}</td>
       <td>{{ data.firstname }}, {{ data.lastname }}</td>
       <td> 
-        <button nz-button nzType="primary" disabled *ngIf="data.registered" nzDanger>Register</button>
+        <button nz-button nzType="primary" *ngIf="data.registered" nzDanger>Register</button>
         <button nz-button nzType="primary" *ngIf="!data.registered" nzDanger (click)="register(data.courseID)">Register</button>
       </td>
     </tr>

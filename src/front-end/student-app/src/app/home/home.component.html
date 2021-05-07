@@ -1,3 +1,18 @@
-<h1 nz-typography class="top-title">Hello {{name}}!</h1>
+<h1 nz-typography class="top-title">Hello {{ name }}!</h1>
+<h2 nz-typography class="top-title">
+  You are a setup as a {{ userType }} with VASSA
+</h2>
 
-<app-student-home></app-student-home>
+<p *ngIf="userType === 'student'" class="top-title" nz-typography>
+  Click your classes to see a list of the classes you can register for.
+</p>
+
+<p *ngIf="userType === 'instructor'" class="top-title" nz-typography>
+  Click <strong>"My Classes"</strong> to see a list of the classes you are teaching and a list of
+  registered students
+</p>
+
+<p *ngIf="userType === 'instructor'" class="top-title" nz-typography>
+    You can assign grades to students from <strong>"My Classes"</strong>
+</p>
+

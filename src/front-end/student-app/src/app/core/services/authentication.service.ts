@@ -24,14 +24,12 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
+  public setCurrentUserSubject(user: User) {
+    this.currentUserSubject.next(user);
+  }
+
   login(credentials: any): Observable<User> {
-    return this.apiService.post("/login", credentials).pipe(
-      map((user) => {
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
-      })
-    );
+    return this.apiService.post("/login", credentials);
   }
 
   register(credentials: any): Observable<any>{

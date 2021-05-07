@@ -22,15 +22,19 @@
   </nz-sider>
   <nz-layout>
     <nz-header>
-        <h1
-          style="padding-left: 10px; padding-top: 10px; text-align: center"
-          nz-typography
-        >
-          VASSA University - Student Records
-        </h1>
+      <h1
+        style="padding-left: 10px; padding-top: 10px; text-align: center"
+        nz-typography
+      >
+        VASSA University - Student Records
+      </h1>
     </nz-header>
     <nz-content>
       <div class="inner-content">
+        <div class="grid justify-items-end" *appShowAuthed="true">
+          <button nz-button (click)="logout()" [nzType]="'danger'">Logout</button>
+        </div>
+
         <router-outlet></router-outlet>
       </div>
     </nz-content>
