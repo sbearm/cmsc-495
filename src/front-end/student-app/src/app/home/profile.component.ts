@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthenticationService } from '../core/services/authentication.service';
 import { ProfileService } from '../core/services/profile.service';
 
@@ -11,7 +12,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private message: NzMessageService
   ) {
     this.profileService.getProfile().subscribe((data) => {
       this.profileForm = this.fb.group({
@@ -44,8 +46,10 @@ export class ProfileComponent implements OnInit {
 
   submitForm() : void {
     let submit = this.profileForm.value;
-    this.profileService.updateProfile(submit).subscribe(data => {
-
+    this.profileService.updateProfile(submit).subscribe(succ => {
+      this.message.create('succes', `Updated Profile`);
+    }, (err) => {
+      this.message.create('error', `Error Updating Profile`);
     });
   }
 }

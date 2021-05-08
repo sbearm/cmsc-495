@@ -36,7 +36,6 @@ export class StudentClassesComponent implements OnInit {
   refreshClasses() : void {
     this.studentService.getClasses().subscribe(data => {
       this.classes = data;
-      console.log(this.classes);
     },
     (err) => {
       console.log(err);
@@ -45,6 +44,7 @@ export class StudentClassesComponent implements OnInit {
 
   register(courseId: number) : void {
     this.studentService.registerClass(courseId).subscribe(succ => {
+      this.message.create('success', `Registered for course`);
       this.refreshClasses();
     },(err) =>{
       this.message.create('error', `Error Registering`);

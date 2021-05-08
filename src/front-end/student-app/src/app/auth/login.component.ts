@@ -43,8 +43,6 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.login(creds).subscribe(
       (succ) => {
-        localStorage.setItem("currentUser", JSON.stringify(succ));
-        this.authenticationService.setCurrentUserSubject(succ);
         this.router.navigate(['/home']);
       },
       (err) => {
@@ -53,19 +51,4 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-
-  quickLogin(): void {
-    let form = this.validateForm.value;
-
-    let creds = {'emailaddress': form.email, 'password': form.password };
-
-    this.authenticationService.register(creds).subscribe(
-      (succ) => {
-        this.router.navigate(['/home']);
-      },
-      (err) => {}
-    );
-  }
-
-  
 }

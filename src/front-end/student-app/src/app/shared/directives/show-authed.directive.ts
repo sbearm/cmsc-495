@@ -3,7 +3,7 @@ import {
   Input,
   OnInit,
   TemplateRef,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
@@ -18,23 +18,19 @@ export class ShowAuthedDirective implements OnInit {
   condition: boolean;
 
   ngOnInit() {
-    this.authenticationService.currentUser.subscribe(
-      (user) => {
-        if(user) {
-          if (user.token && this.condition || !user.token && !this.condition) {
-            this.viewContainer.createEmbeddedView(this.templateRef);
-          } else {
-            this.viewContainer.clear();
-          }
-        } else {
-          this.viewContainer.clear();
-        }
+    let user = this.authenticationService.currentUserValue;
+    if (user) {
+      if ((user.token && this.condition) || (!user.token && !this.condition)) {
+        this.viewContainer.createEmbeddedView(this.templateRef);
+      } else {
+        this.viewContainer.clear();
       }
-    );
+    } else {
+      this.viewContainer.clear();
+    }
   }
 
   @Input() set appShowAuthed(condition: boolean) {
     this.condition = condition;
   }
-
 }

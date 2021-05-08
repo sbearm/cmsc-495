@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/core/models/user.model';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
@@ -9,13 +10,18 @@ import { AuthenticationService } from 'src/app/core/services/authentication.serv
 })
 export class LayoutComponent implements OnInit {
 
-  userType: string = 'student';
+  userType: string;
+
+  currentUser: User;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
   ngOnInit(): void {
-    this.userType = this.authenticationService.currentUserValue.userType
-    
+    this.authenticationService.currentUser.subscribe(data => {
+      this.currentUser = data;
+      this.userType = data.userType
+    });
+    // this.userType = this.authenticationService.currentUserValue.userType;
   }
 
   logout() : void {

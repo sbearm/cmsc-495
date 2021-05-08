@@ -28,8 +28,13 @@ export class AuthenticationService {
     this.currentUserSubject.next(user);
   }
 
-  login(credentials: any): Observable<User> {
-    return this.apiService.post("/login", credentials);
+  login(credentials: any) {
+    return this.apiService.post("/login", credentials).pipe(      map((user) => {
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        this.currentUserSubject.next(user);
+        return user;
+      })
+    );
   }
 
   register(credentials: any): Observable<any>{

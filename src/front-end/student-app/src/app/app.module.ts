@@ -16,6 +16,7 @@ import * as AllIcons from '@ant-design/icons-angular/icons';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AuthModule } from './auth/auth.module';
+import { LayoutComponent } from './shared/layout';
 
 registerLocaleData(en);
 
@@ -27,7 +28,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
 );
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LayoutComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

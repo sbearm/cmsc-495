@@ -9,11 +9,13 @@ const routes: Routes = [
     path: '',
     component: StudentComponent,
     canActivate: [AuthGuard],
+    data: { permittedRoles: ["student"] }
   },
   {
     path: 'classes',
     component: StudentClassesComponent,
     canActivate: [AuthGuard],
+    data: { permittedRoles: ["student"] }
   }
 ];
 

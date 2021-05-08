@@ -15,17 +15,15 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if(this.authenticationService.currentUserValue != null) {
-      // let roles = next.data['permittedRoles'] as Array<string>;
-      // if(roles) {
-      //   if(this.authenticationService.roleMatch(roles)) {
-      //     return true;
-      //   } else {
-      //     this.router.navigate(['/forbidden']);
-      //     return false;
-      //   }
-      // }
-      // return true; 
-      // console.log(this.authenticationService.currentUserValue)
+      let role = next.data['permittedRoles'] as Array<string>;
+      if(role) {
+        if(this.authenticationService.currentUserValue.userType === role[0]) {
+          return true;
+        } else {
+          this.router.navigate(['/home']);
+          return false;
+        }
+      }
       return true;
     } else {
       this.router.navigate(['/login']);

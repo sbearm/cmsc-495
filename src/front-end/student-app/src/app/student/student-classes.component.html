@@ -1,4 +1,4 @@
-<nz-table nzTitle="Available Classes" #basicTable [nzData]="classes">
+<nz-table nzTitle="Available Classes" #basicTable [nzData]="classes" [nzPageSize]="8">
   <thead>
     <tr>
       <th>ClassId</th>
@@ -21,7 +21,7 @@
       <td>{{ data.departmentName }}</td>
       <td>{{ data.firstname }}, {{ data.lastname }}</td>
       <td> 
-        <button nz-button nzType="primary" *ngIf="data.registered" nzDanger>Register</button>
+        <button nz-button nzType="primary" *ngIf="data.registered" nzDanger disabled>Register</button>
         <button nz-button nzType="primary" *ngIf="!data.registered" nzDanger (click)="register(data.courseID)">Register</button>
       </td>
     </tr>
