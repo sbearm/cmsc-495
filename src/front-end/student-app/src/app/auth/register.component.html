@@ -1,60 +1,80 @@
 <div>
-    <div nz-row nzJustify="center">
-      <div nz-col>
-        <nz-card style="width: 300px" nzTitle="SRMS Registration">
-          <form
-            nz-form
-            [formGroup]="validateForm"
-            class="login-form"
-            (ngSubmit)="submitForm()"
-          >
+  <div nz-row nzJustify="center">
+    <div nz-col>
+      <nz-card style="width: 300px" nzTitle="SRMS Registration">
+        <form
+          nz-form
+          [formGroup]="validateForm"
+          class="login-form"
+          (ngSubmit)="submitForm()"
+        >
+        <span *ngIf="registerError != ''">{{registerError}}</span>
           <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your name!">
+            <nz-form-control nzErrorTip="Please input your FirstName!">
               <nz-input-group nzPrefixIcon="name">
                 <input
                   type="text"
                   nz-input
-                  formControlName="name"
-                  placeholder="Name"
+                  formControlName="firstname"
+                  placeholder="FirstName"
                 />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
-            <nz-form-item>
-              <nz-form-control nzErrorTip="Please input your email!">
-                <nz-input-group nzPrefixIcon="email">
-                  <input
-                    type="text"
-                    nz-input
-                    formControlName="email"
-                    placeholder="Email"
-                  />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <nz-form-control nzErrorTip="Please input your Password!">
-                <nz-input-group nzPrefixIcon="lock">
-                  <input
-                    type="password"
-                    nz-input
-                    formControlName="password"
-                    placeholder="Password"
-                  />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-            <button
-              nz-button
-              class="login-form-button login-form-margin"
-              [nzType]="'primary'"
-            >
-              Register
-            </button>
-            Or <a routerLink="/login"> login now! </a>
-          </form>
-        </nz-card>
-      </div>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your Lastname!">
+              <nz-input-group nzPrefixIcon="name">
+                <input
+                  type="text"
+                  nz-input
+                  formControlName="lastname"
+                  placeholder="LastName"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your Email!">
+              <nz-input-group nzPrefixIcon="email">
+                <input
+                  type="text"
+                  nz-input
+                  formControlName="email"
+                  placeholder="Email"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your Password!">
+              <nz-input-group nzPrefixIcon="lock">
+                <input
+                  type="password"
+                  nz-input
+                  formControlName="password"
+                  placeholder="Password"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please select a user type!">
+              <nz-select formControlName="userType">
+                <nz-option nzValue="student" nzLabel="Student"></nz-option>
+                <nz-option nzValue="instructor" nzLabel="Instructor"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <button
+            nz-button
+            class="login-form-button login-form-margin"
+            [nzType]="'primary'"
+          >
+            Register
+          </button>
+          Or <a routerLink="/login"> login now! </a>
+        </form>
+      </nz-card>
     </div>
   </div>
-  
+</div>

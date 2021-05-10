@@ -72,19 +72,28 @@ def register():
                 'select * from Users where emailaddress = ?', [auth['emailaddress']])
 
             if(user):
-                return {'error': 'Email is already in use'}, 400
+                return 'Email is already in use', 400
 
             hashed_password = generate_password_hash(auth['password'])
 
-            db.execute("insert into Users(firstname, lastname, emailaddress, password) values(?, ?, ?, ?)", [
+            userId = db.execute("insert into Users(firstname, lastname, emailaddress, password) values(?, ?, ?, ?)", [
                     auth['firstname'], auth['lastname'], auth['emailaddress'], hashed_password])
+
+            if(auth['userType'] == 'student'):
+                db.execute("insert into student(userId, userType, Major, GPA) values(?, ?, ?, ?)", [
+                    userId, 'instructor', 3000, 'Engineering Sciences'])
+                return jsonify({'data': 'Successfully registered'})
+
+            if(auth['userType'] == 'instructor'):
+                db.execute("insert into instructor(userId, userType, departmentId, departmentName) values(?, ?, ?, ?)", [
+                    userId, 'student', 'N/A', 0])
+                return jsonify({'data': 'Successfully registered'})
 
             if(auth['userType'] == None):
                 return jsonify({'data': 'Successfully registered'})
 
-
         else:
-            return {'error': 'Must provide email and password to register'}, 400
+            return 'Must provide email and password to register', 400
     except Exception as err:
         print(err)
         return 'Error', 400

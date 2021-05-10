@@ -29,16 +29,17 @@ export class AuthenticationService {
   }
 
   login(credentials: any) {
-    return this.apiService.post("/login", credentials).pipe(      map((user) => {
-        localStorage.setItem("currentUser", JSON.stringify(user));
+    return this.apiService.post('/login', credentials).pipe(
+      map((user) => {
+        localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
         return user;
       })
     );
   }
 
-  register(credentials: any): Observable<any>{
-    return this.apiService.post("/register", credentials).pipe(
+  register(credentials: any): Observable<any> {
+    return this.apiService.post('/register', credentials).pipe(
       map((message) => {
         return message;
       })
